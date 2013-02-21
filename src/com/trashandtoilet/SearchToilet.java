@@ -7,6 +7,7 @@ import android.support.v4.app.FragmentActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -19,10 +20,12 @@ public class SearchToilet extends FragmentActivity /*
 													 * OnMapLongClickListener,
 													 * OnCameraChangeListener
 													 */{
-	static final LatLng FirstToilet = new LatLng(17.447729806707645,
+	static final LatLng SecondToilet = new LatLng(17.447729806707645,
 			78.3633230254054);
-	static final LatLng SecondToilet = new LatLng(17.4438208734482,
+	static final  LatLng FirstToilet = new LatLng(17.4438208734482,
 			78.36638074368238);
+	
+	
 	private GoogleMap map;
 
 	@SuppressLint("NewApi")
@@ -45,7 +48,8 @@ public class SearchToilet extends FragmentActivity /*
 
 			map.moveCamera(CameraUpdateFactory.newCameraPosition(cLocation));
 			map.addMarker(new MarkerOptions().position(
-					new LatLng(latitude, longitude)).title("Marker"));
+					new LatLng(latitude, longitude)).title("You").icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_locator)));
+
 			addToiletsAndDustbins(map);
 			/*
 			 * map.setOnMapClickListener(this);
@@ -57,15 +61,15 @@ public class SearchToilet extends FragmentActivity /*
 			// can't get location
 			// GPS or Network is not enabled
 			// Ask user to enable GPS/network in settings
-			gps.showSettingsAlert();
+			gps.showSettingsAlert();  
 		}
 
 	}
 
 	private void addToiletsAndDustbins(GoogleMap map) {
-		map.addMarker(new MarkerOptions().position(FirstToilet).title("Marker"));
+		map.addMarker(new MarkerOptions().position(FirstToilet).title("toilet").icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_toilet_marker)));
 		map.addMarker(new MarkerOptions().position(SecondToilet)
-				.title("Marker"));
+				.title("Dustbin").icon(BitmapDescriptorFactory.fromResource(R.drawable.icon_dustbin_marker)));
 
 	}
 

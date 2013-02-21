@@ -17,4 +17,13 @@
     <string name="title_activity_header_footer">HeaderFooter</string>
     <string name="trash">Trash</string>
     <string name="toilet">Toilet</string>
+    <string name="title_activity_map">MapActivity</string>
+    <string name="title_activity_list">ListActivity</string>
+    <string name="title_activity_view_all">ViewAll</string>
+    <string name="title_activity_view_toilets">ViewToilets</string>
+    <string name="title_activity_view_trash">ViewTrash</string>
+    <string name="title_activity_androidtab">AndroidTab</string>
+    <string name="title_activity_add_new">AddNew</string>
+    <string name="title_activity_suggest_new">SuggestNew</string>
+
 </resources>

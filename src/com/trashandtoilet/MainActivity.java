@@ -29,7 +29,7 @@ public class MainActivity extends Activity {
 	                } finally {
 
 	                    startActivity(new Intent(MainActivity.this,
-	                            SearchToilet.class));
+	                            AndroidTabMainActivity.class));
 	                    MainActivity.this.finish();
 	                }
 	}
