@@ -27,7 +27,7 @@ public class TestingParsing {
 	private static final String TAG_HEIGHT = "height";
 	private static final String TAG_WIDTH = "width";
 	private static final String TAG_PHOTO_REFERENCE = "photo_reference";
-	public ArrayList<Component> parseJSONObject(JSONObject finalResult, String mode) {
+	public ArrayList<Component> parseJSONObject(JSONObject finalResult, String mode, double latitudeHome, double longitudeHome) {
  	ArrayList<Component> toilets = new ArrayList<Component>();
 		try {
 			JSONArray results = finalResult.getJSONArray(TAG_RESULTS);
@@ -91,9 +91,8 @@ public class TestingParsing {
 					toilet.setToilet(true);
 				} else if (mode.equals(GlobalConstants.ONLY_TRASH)) {
 					toilet.setTrash(true);
-
-
 				}
+				toilet.setDistance(distance(latitudeHome, longitudeHome, toilet.getLatitude(), toilet.getLongitude(), 'K'));
 				toilets.add(toilet);
 
 				}
@@ -104,5 +103,34 @@ public class TestingParsing {
 		return toilets;
 
 	}
+	
+	
+	private static double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
+	      double theta = lon1 - lon2;
+	      double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+	      dist = Math.acos(dist);
+	      dist = rad2deg(dist);
+	      dist = dist * 60 * 1.1515;
+	      if (unit == 'K') {
+	        dist = dist * 1.609344;
+	      } else if (unit == 'N') {
+	        dist = dist * 0.8684;
+	        }
+	      return (dist);
+	    }
+
+	    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+	    /*::  This function converts decimal degrees to radians             :*/
+	    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+	    private static double deg2rad(double deg) {
+	      return (deg * Math.PI / 180.0);
+	    }
+
+	    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+	    /*::  This function converts radians to decimal degrees             :*/
+	    /*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+	    private static double rad2deg(double rad) {
+	      return (rad * 180.0 / Math.PI);
+	    }
 
 }

@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -23,6 +24,8 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -34,23 +37,27 @@ import android.widget.RadioGroup.LayoutParams;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.trashandtoilet.dto.Component;
+import com.trashandtoilet.dto.ComponentComparatore;
 import com.trashandtoilet.service.CustomizedAdapter;
 import com.trashandtoilet.service.GPSTracker;
 import com.trashandtoilet.windowadapter.TestingParsing;
 
 @SuppressLint("NewApi")
-public class SearchToilet extends FragmentActivity   /*
+public class SearchToilet extends FragmentActivity  implements OnInfoWindowClickListener /*
 													 * implements'
 													 * OnMapClickListener,
 													 * OnMapLongClickListener,
 													 * OnCameraChangeListener
 													 */{
+	LatLng cLocation;
 	static final LatLng SecondToilet = new LatLng(17.447729806707645,
 			78.3633230254054);
 	static final LatLng FirstToilet = new LatLng(17.4438208734482,
@@ -91,13 +98,15 @@ public class SearchToilet extends FragmentActivity   /*
 
 			latitude = gps.getLatitude();
 			longitude = gps.getLongitude();
+			cLocation = new LatLng(latitude, longitude);
 			CameraPosition cLocation = new CameraPosition.Builder()
 					.target(new LatLng(latitude, longitude)).zoom(12.5f)
 					.bearing(300).tilt(50).build();
 
 			map = ((SupportMapFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.map)).getMap();
-
+			//Vaish
+			map.setOnInfoWindowClickListener(this);
 			map.moveCamera(CameraUpdateFactory.newCameraPosition(cLocation));
 			map.addMarker(new MarkerOptions()
 					.position(new LatLng(latitude, longitude))
@@ -246,13 +255,11 @@ public class SearchToilet extends FragmentActivity   /*
 				}
 				finalResult = new JSONObject(builder.toString());
 				if (mode.equals(GlobalConstants.ONLY_TOILETS)) {
-					toilets = new TestingParsing().parseJSONObject(finalResult,mode);
+					toilets = new TestingParsing().parseJSONObject(finalResult,mode,latitude,longitude);
 				} else if (mode.equals(GlobalConstants.ONLY_TRASH)) {
 					setDustbins(new TestingParsing()
-							.parseJSONObject(finalResult,mode));
-
+							.parseJSONObject(finalResult,mode,latitude,longitude));
 				}
-
 				System.out.println(finalResult);
 			} catch (ClientProtocolException e) {
 				// TODO Auto-generated catch block
@@ -314,9 +321,9 @@ public class SearchToilet extends FragmentActivity   /*
 		ImageView imageView=(ImageView) findViewById(R.id.imageView5);
 		imageView.setImageResource(R.drawable.icon_toliets_only);
 		imageView=(ImageView) findViewById(R.id.imageView4);
-		imageView.setImageResource(R.drawable.icon_view_all_deselect);
+		imageView.setImageResource(R.drawable.icon_view_all_deslect);
 		imageView=(ImageView) findViewById(R.id.imageView6);
-		imageView.setImageResource(R.drawable.icon_dustbin_deselct);
+		imageView.setImageResource(R.drawable.icon_dustbin_deselect);
 		map.clear();
 		if (toilets.size() > 0 && latitude != 0 && longitude != 0) {
 			map.addMarker(new MarkerOptions()
@@ -340,9 +347,9 @@ public class SearchToilet extends FragmentActivity   /*
 		ImageView imageView=(ImageView) findViewById(R.id.imageView6);
 		imageView.setImageResource(R.drawable.icon_dustbin);
 		imageView=(ImageView) findViewById(R.id.imageView4);
-		imageView.setImageResource(R.drawable.icon_view_all_deselect);
+		imageView.setImageResource(R.drawable.icon_view_all_deslect);
 		imageView=(ImageView) findViewById(R.id.imageView5);
-		imageView.setImageResource(R.drawable.icon_toliets_only_deselct);
+		imageView.setImageResource(R.drawable.icon_toilet_deselect);
 		map.clear();
 		if (trashcans.size() > 0 && latitude != 0 && longitude != 0) {
 			map.addMarker(new MarkerOptions()
@@ -367,9 +374,9 @@ public class SearchToilet extends FragmentActivity   /*
 		ImageView imageView=(ImageView) findViewById(R.id.imageView4);
 		imageView.setImageResource(R.drawable.icon_view_all);
 		imageView=(ImageView) findViewById(R.id.imageView5);
-		imageView.setImageResource(R.drawable.icon_toliets_only_deselct);
+		imageView.setImageResource(R.drawable.icon_toilet_deselect);
 		imageView=(ImageView) findViewById(R.id.imageView6);
-		imageView.setImageResource(R.drawable.icon_dustbin_deselct);
+		imageView.setImageResource(R.drawable.icon_dustbin_deselect);
 		map.clear();
 		if ((toilets.size() >0 || trashcans.size() > 0) && latitude != 0 && longitude != 0) {
 			map.addMarker(new MarkerOptions()
@@ -409,14 +416,16 @@ public class SearchToilet extends FragmentActivity   /*
 	ImageView imageView=(ImageView) findViewById(R.id.imageView3);
 	imageView.setImageResource(R.drawable.icon_list_view);
 	imageView=(ImageView) findViewById(R.id.imageView2);
-	imageView.setImageResource(R.drawable.icon_map_view_notselect);
+	imageView.setImageResource(R.drawable.icon_map_view_deselect);
 	
 	ArrayList<Component> components=toilets;
 	components.addAll(trashcans);
+	Collections.sort(components,new ComponentComparatore());
     CustomizedAdapter adapter=new CustomizedAdapter(this, R.layout.activity_list_view,toilets);
     listView.setAdapter(adapter);
 	
 	}
+	
 	public void mapView(View view){
 		findViewById(R.id.list1).setLayoutParams(new LayoutParams(0,0));
 		findViewById(R.id.map).setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));;		
@@ -425,4 +434,55 @@ public class SearchToilet extends FragmentActivity   /*
 		imageView=(ImageView) findViewById(R.id.imageView3);
 		imageView.setImageResource(R.drawable.icon_list_view_deselect);
 		}
+	@Override
+    public void onInfoWindowClick(Marker marker) {
+	
+		   LatLng destAddr = marker.getPosition();
+		   Double destLat = destAddr.latitude;
+		   Double destLon = destAddr.longitude;
+		   
+		   Double srcLat = cLocation.latitude;
+		   Double srcLon = cLocation.longitude;
+		   
+		   
+		   //System.out.println("URL = " + Uri.parse(
+	         //       "http://maps.google.com/maps?" +
+	         //       "saddr=" + srcLat + "," + srcLon + "&daddr=" + destLat + "," + destLon));
+	                
+		   
+		   
+	       final Intent intent = new Intent(Intent.ACTION_VIEW,
+	       /** Using the web based turn by turn directions url. */
+	    		
+	       Uri.parse(
+	                "http://maps.google.com/maps?" +
+	                "saddr=" + srcLat + "," + srcLon + "&daddr=" + destLat + "," + destLon));
+	                
+	       intent.setClassName(
+	                 "com.google.android.apps.maps",
+	                 "com.google.android.maps.MapsActivity");
+	       startActivity(intent);
+       	}
+	
+	public void getDirections(View view){
+		ImageView view2=(ImageView) view;
+		String contentDescription=(String) view2.getContentDescription();
+		String[] str=contentDescription.split("\\$");
+		if(str.length==2){
+			 Double destLat=Double.parseDouble(str[0]);
+			 Double destLon=Double.parseDouble(str[1]);
+			 final Intent intent = new Intent(Intent.ACTION_VIEW,
+				       /** Using the web based turn by turn directions url. */
+				    		
+				       Uri.parse(
+				                "http://maps.google.com/maps?" +
+				                "saddr=" + latitude + "," + longitude + "&daddr=" + destLat + "," + destLon));
+				                
+				       intent.setClassName(
+				                 "com.google.android.apps.maps",
+				                 "com.google.android.maps.MapsActivity");
+				       startActivity(intent);
+		}
+		
+	}
 }

@@ -37,26 +37,35 @@ public class CustomizedAdapter extends ArrayAdapter<Component> {
 			row = inflater.inflate(layoutResourceId, parent, false);
 
 			holder = new ComponentHolder();
-			holder.imgIcon = (ImageView) row.findViewById(R.id.imgIcon);
-			holder.txtTitle = (TextView) row.findViewById(R.id.txtTitle);
+			holder.imgIcon1 = (ImageView) row.findViewById(R.id.imgIcon1);
+			holder.txtTitle1 = (TextView) row.findViewById(R.id.txtTitle1);
+			holder.txtTitle2 = (TextView) row.findViewById(R.id.txtTitle2);
+			holder.imgIcon2 = (ImageView) row.findViewById(R.id.imgIcon2);
 
 			row.setTag(holder);
 		} else {
 			holder = (ComponentHolder) row.getTag();
 		}
-
 		Component component = data.get(position);
-		holder.txtTitle.setText(component.getName());
+        double distance=component.getDistance();
+        distance = Math.round( distance * 100.0 ) / 100.0;
+		holder.txtTitle1.setText(component.getName());
+		holder.txtTitle2.setText(distance+" KM");
 		if (component.isToilet())
-			holder.imgIcon.setImageResource(R.drawable.icon_toliets_only);
+			holder.imgIcon1.setImageResource(R.drawable.icon_toilet_list_view);
 		else if (component.isTrash())
-			holder.imgIcon.setImageResource(R.drawable.icon_dustbin);
-
-		return row;
+			holder.imgIcon1.setImageResource(R.drawable.icon_dustbin_list_view);
+		
+		holder.imgIcon2.setImageResource(R.drawable.icon_go_right);
+		holder.imgIcon2.setContentDescription(component.getLatitude()+"$"+component.getLongitude());
+       return row;
 	}
 
 	static class ComponentHolder {
-		ImageView imgIcon;
-		TextView txtTitle;
+		ImageView imgIcon1;
+		TextView txtTitle1;
+		TextView txtTitle2;
+		ImageView imgIcon2;
+
 	}
 }

@@ -1,7 +1,7 @@
 package com.trashandtoilet.dto;
 
 public class Component {
-
+    private double distance;
 	private  String results;
 	private  double latitude;
 	private  double longitude;
@@ -99,6 +99,12 @@ public class Component {
 	}
 	public void setRankings(String rankings) {
 		this.rankings = rankings;
+	}
+	public double getDistance() {
+		return distance;
+	}
+	public void setDistance(double distance) {
+		this.distance = distance;
 	}
 	
 
