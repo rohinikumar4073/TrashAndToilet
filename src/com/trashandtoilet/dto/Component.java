@@ -1,6 +1,6 @@
 package com.trashandtoilet.dto;
 
-public class Toilet {
+public class Component {
 
 	private  String results;
 	private  double latitude;
@@ -9,9 +9,24 @@ public class Toilet {
 	private  String id;
 	private  String name;
 	private  String openingHours;
+    private String rankings;
+	public boolean isToilet() {
+		return toilet;
+	}
+	public void setToilet(boolean toilet) {
+		this.toilet = toilet;
+	}
+	public boolean isTrash() {
+		return trash;
+	}
+	public void setTrash(boolean trash) {
+		this.trash = trash;
+	}
 	private  String types;
 	private  String reference;
 	private  Photo photos;
+	private  boolean toilet;
+	private boolean trash;
 	private Boolean openNow;
 	public Boolean getOpenNow() {
 		return openNow;
@@ -78,6 +93,12 @@ public class Toilet {
 	}
 	public void setOpenNow(Boolean openNow) {
 		this.openNow = openNow;
+	}
+	public String getRankings() {
+		return rankings;
+	}
+	public void setRankings(String rankings) {
+		this.rankings = rankings;
 	}
 	
 

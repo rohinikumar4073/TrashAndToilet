@@ -15,23 +15,82 @@
      limitations under the License.
 
 -->
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#404041"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="176dp"
+        android:layout_height="36dp"
+        android:background="#404041"
+        android:src="@drawable/tandtheader" />
+
+    <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent" 
-        android:orientation="vertical"
-        android:background="#404041">
+        android:layout_height="36dp"
+        android:background="#B2D34C"
+        android:orientation="horizontal" >
 
-    
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2.22"
+            android:onClick="mapView"
+            android:src="@drawable/icon_map_view" />
 
-  <ImageView
-            android:id="@+id/imageView1"
-            android:layout_width="176dp"
-            android:layout_height="35dp"
-            android:src="@drawable/tandtheader"  android:background="#404041"/>
-     <fragment
-            android:id="@+id/map"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            class="com.google.android.gms.maps.SupportMapFragment" />
-  
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2.22"
+            android:onClick="listView"
+            android:src="@drawable/icon_list_view_deselect" />
+
+        <ImageView
+            android:id="@+id/imageView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2.22"
+            android:onClick="viewAll"
+            android:src="@drawable/icon_view_all" />
+
+        <ImageView
+            android:id="@+id/imageView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2.22"
+            android:onClick="onlyToilets"
+            android:src="@drawable/icon_toliets_only_deselct" />
+
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="2.22"
+            android:onClick="onlyTrashCans"
+            android:src="@drawable/icon_dustbin_deselct" />
     </LinearLayout>
+
+    <fragment
+        android:id="@+id/map"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        class="com.google.android.gms.maps.SupportMapFragment" />
+
+    <ListView
+        android:id="@+id/list1"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#283018" >
+    </ListView>
+
+</LinearLayout>

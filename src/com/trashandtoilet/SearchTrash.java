@@ -1,9 +1,5 @@
 package com.trashandtoilet;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.trashandtoilet.service.GPSTracker;
 
 import android.app.Activity;
 import android.os.Bundle;

@@ -5,8 +5,10 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import com.trashandtoilet.GlobalConstants;
 import com.trashandtoilet.dto.Photo;
-import com.trashandtoilet.dto.Toilet;
+import com.trashandtoilet.dto.Component;
 
 public class TestingParsing {
 	private static final String TAG_RESULTS = "results";
@@ -25,12 +27,12 @@ public class TestingParsing {
 	private static final String TAG_HEIGHT = "height";
 	private static final String TAG_WIDTH = "width";
 	private static final String TAG_PHOTO_REFERENCE = "photo_reference";
-	public List<Toilet> parseJSONObject(JSONObject finalResult) {
- 	ArrayList<Toilet> toilets = new ArrayList<Toilet>();
+	public ArrayList<Component> parseJSONObject(JSONObject finalResult, String mode) {
+ 	ArrayList<Component> toilets = new ArrayList<Component>();
 		try {
 			JSONArray results = finalResult.getJSONArray(TAG_RESULTS);
 			for (int i = 0; i < results.length(); i++) {
-				Toilet toilet = new Toilet();
+				Component toilet = new Component();
 				JSONObject object = results.getJSONObject(i);
 				String name = object.optString(TAG_NAME);
 				if (name != null && !name.equals("")) {
@@ -85,7 +87,15 @@ public class TestingParsing {
 				}
 				if(photo!=null)
 				toilet.setPhotos(photo);
+				if (mode.equals(GlobalConstants.ONLY_TOILETS)) {
+					toilet.setToilet(true);
+				} else if (mode.equals(GlobalConstants.ONLY_TRASH)) {
+					toilet.setTrash(true);
+
+
+				}
 				toilets.add(toilet);
+
 				}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

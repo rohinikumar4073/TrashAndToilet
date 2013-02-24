@@ -25,7 +25,8 @@
 
     <application
         android:allowBackup="true"
-        android:theme="@android:style/Theme.NoTitleBar" >
+          android:logo="@drawable/icon_launcher"
+        android:theme="@android:style/Theme.NoTitleBar">
         <activity
             android:name="com.trashandtoilet.MainActivity"
             android:label="@string/app_name" >
@@ -91,7 +92,7 @@
             android:label="@string/title_activity_androidtab" >
         </activity>
         <activity
-            android:name="com.trashandtoilet.ListActivity"
+            android:name="com.trashandtoilet.ListViewActivity"
             android:label="@string/title_activity_list"
             android:parentActivityName="com.trashandtoilet.MainActivity" >
             <meta-data

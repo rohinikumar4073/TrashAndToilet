@@ -3,7 +3,7 @@ package com.trashandtoilet;
 import android.app.Activity;
 import android.os.Bundle;
 
-public class ListActivity extends Activity {
+public class ListViewActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

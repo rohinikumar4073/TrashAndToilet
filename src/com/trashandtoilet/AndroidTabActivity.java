@@ -13,7 +13,7 @@ public class AndroidTabActivity extends TabActivity {
 	        super.onCreate(savedInstanceState);
 	        setContentView(R.layout.tablayout);
 	 
-	        TabHost tabHost = getTabHost();
+	    /*    TabHost tabHost = getTabHost();
 	 
 	        // Tab for Photos
 	        TabSpec ViewAll = tabHost.newTabSpec("View All");
@@ -52,7 +52,7 @@ public class AndroidTabActivity extends TabActivity {
 	        tabHost.addTab(ViewAll); // Adding videos tab
 	        tabHost.addTab(toiletsOnly); // Adding songs tab
 	        tabHost.addTab(trashOnly); // Adding videos tab
-  
+*/  
 	 }
 	}
 
