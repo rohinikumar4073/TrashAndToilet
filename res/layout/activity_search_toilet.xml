@@ -26,8 +26,7 @@
         android:layout_width="176dp"
         android:layout_height="36dp"
         android:background="#404041"
-        android:src="@drawable/tandtheader"
-         android:layout_marginLeft="8dp"/>
+        android:src="@drawable/tandtheader" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -70,8 +69,7 @@
             android:layout_gravity="center_vertical"
             android:layout_weight="2.22"
             android:onClick="onlyToilets"
-            android:src="@drawable/icon_toilet_deselect" 
-          />
+            android:src="@drawable/icon_toilet_deselect" />
 
         <ImageView
             android:id="@+id/imageView6"

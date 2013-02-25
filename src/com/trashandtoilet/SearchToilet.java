@@ -51,19 +51,17 @@ import com.trashandtoilet.service.GPSTracker;
 import com.trashandtoilet.windowadapter.TestingParsing;
 
 @SuppressLint("NewApi")
-public class SearchTrashAndToilets extends FragmentActivity implements
-		OnInfoWindowClickListener /*
-								 * implements' OnMapClickListener,
-								 * OnMapLongClickListener,
-								 * OnCameraChangeListener
-								 */{
+public class SearchToilet extends FragmentActivity  implements OnInfoWindowClickListener /*
+													 * implements'
+													 * OnMapClickListener,
+													 * OnMapLongClickListener,
+													 * OnCameraChangeListener
+													 */{
 	LatLng cLocation;
 	static final LatLng SecondToilet = new LatLng(17.447729806707645,
 			78.3633230254054);
 	static final LatLng FirstToilet = new LatLng(17.4438208734482,
 			78.36638074368238);
-	public static String viewType = GlobalConstants.MAP_VIEW;
-	public static String filterType = GlobalConstants.VIEW_ALL;
 
 	private GoogleMap map;
 	private static ArrayList<Component> toilets = new ArrayList<Component>();
@@ -72,8 +70,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 	private static double latitude;
 	private Handler progressBarHandler = new Handler();
 	private int progressBarStatus;
-	private ProgressDialog progressBar;
-
+	private  ProgressDialog progressBar;
 	public GoogleMap getMap() {
 		return map;
 	}
@@ -87,7 +84,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 	}
 
 	public void setToilets(ArrayList<Component> toilets) {
-		SearchTrashAndToilets.toilets = toilets;
+		SearchToilet.toilets = toilets;
 	}
 
 	@SuppressLint("NewApi")
@@ -95,7 +92,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 		System.out.println("Starting Search");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search_toilet);
-		GPSTracker gps = new GPSTracker(SearchTrashAndToilets.this);
+		GPSTracker gps = new GPSTracker(SearchToilet.this);
 		// check if GPS enabled
 		if (gps.canGetLocation()) {
 
@@ -108,7 +105,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 
 			map = ((SupportMapFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.map)).getMap();
-			// Vaish
+			//Vaish
 			map.setOnInfoWindowClickListener(this);
 			map.moveCamera(CameraUpdateFactory.newCameraPosition(cLocation));
 			map.addMarker(new MarkerOptions()
@@ -116,7 +113,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 					.title("You")
 					.icon(BitmapDescriptorFactory
 							.fromResource(R.drawable.icon_locator)));
-			progressBar = new ProgressDialog(this);
+			  progressBar = new ProgressDialog(this);
 			progressBar.setCancelable(true);
 			progressBar.setMessage("Loading Toilets & TrashCans");
 			progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
@@ -125,9 +122,9 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 			progressBar.show();
 			progressBarHandler.post(new Runnable() {
 				public void run() {
-					progressBar.setProgress(progressBarStatus);
+				  progressBar.setProgress(progressBarStatus);
 				}
-			});
+			  });
 			if (toilets.size() > 0 || trashcans.size() > 0) {
 				progressBar.dismiss();
 				for (Iterator iterator = toilets.iterator(); iterator.hasNext();) {
@@ -138,7 +135,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 											.getLongitude()))
 							.title(toilet.getName())
 							.icon(BitmapDescriptorFactory
-									.fromResource(R.drawable.icons_toilet_marker)));
+									.fromResource(R.drawable.icon_toilet_marker)));
 				}
 				for (Iterator iterator = trashcans.iterator(); iterator
 						.hasNext();) {
@@ -217,7 +214,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 	}
 
 	public void setDustbins(ArrayList<Component> trashcans) {
-		SearchTrashAndToilets.trashcans = trashcans;
+		SearchToilet.trashcans = trashcans;
 	}
 
 	private class GetToilets extends AsyncTask<URI, Integer, String> {
@@ -232,14 +229,14 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 		public GetToilets() {
 			// TODO Auto-generated constructor stub
 		}
-
 		@Override
-		protected void onProgressUpdate(Integer... progress) {
-			setProgressPercent(progress[0]);
-		}
+	     protected void onProgressUpdate(Integer... progress) {
+	         setProgressPercent(progress[0]);
+	     }
+
 
 		private void setProgressPercent(Integer integer) {
-			progressBarStatus = integer;
+			progressBarStatus=integer;		
 		}
 
 		@Override
@@ -258,11 +255,10 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 				}
 				finalResult = new JSONObject(builder.toString());
 				if (mode.equals(GlobalConstants.ONLY_TOILETS)) {
-					toilets = new TestingParsing().parseJSONObject(finalResult,
-							mode, latitude, longitude);
+					toilets = new TestingParsing().parseJSONObject(finalResult,mode,latitude,longitude);
 				} else if (mode.equals(GlobalConstants.ONLY_TRASH)) {
-					setDustbins(new TestingParsing().parseJSONObject(
-							finalResult, mode, latitude, longitude));
+					setDustbins(new TestingParsing()
+							.parseJSONObject(finalResult,mode,latitude,longitude));
 				}
 				System.out.println(finalResult);
 			} catch (ClientProtocolException e) {
@@ -291,7 +287,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 											.getLongitude()))
 							.title(toilet.getName())
 							.icon(BitmapDescriptorFactory
-									.fromResource(R.drawable.icons_toilet_marker)));
+									.fromResource(R.drawable.icon_toilet_marker)));
 				}
 			} else if (mode.equals(GlobalConstants.ONLY_TRASH)) {
 				for (Iterator iterator = trashcans.iterator(); iterator
@@ -322,239 +318,171 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 	}
 
 	public void onlyToilets(View view) {
-		ImageView imageView = (ImageView) findViewById(R.id.imageView5);
+		ImageView imageView=(ImageView) findViewById(R.id.imageView5);
 		imageView.setImageResource(R.drawable.icon_toliets_only);
-		imageView = (ImageView) findViewById(R.id.imageView4);
+		imageView=(ImageView) findViewById(R.id.imageView4);
 		imageView.setImageResource(R.drawable.icon_view_all_deslect);
-		imageView = (ImageView) findViewById(R.id.imageView6);
+		imageView=(ImageView) findViewById(R.id.imageView6);
 		imageView.setImageResource(R.drawable.icon_dustbin_deselect);
-		filterType = GlobalConstants.ONLY_TOILETS;
-		if (viewType.equals(GlobalConstants.MAP_VIEW)) {
-			map.clear();
-			if (toilets.size() > 0 && latitude != 0 && longitude != 0) {
+		map.clear();
+		if (toilets.size() > 0 && latitude != 0 && longitude != 0) {
+			map.addMarker(new MarkerOptions()
+					.position(new LatLng(latitude, longitude))
+					.title("You")
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.icon_locator)));
+			for (Iterator iterator = toilets.iterator(); iterator.hasNext();) {
+				Component toilet = (Component) iterator.next();
 				map.addMarker(new MarkerOptions()
-						.position(new LatLng(latitude, longitude))
-						.title("You")
+						.position(
+								new LatLng(toilet.getLatitude(), toilet
+										.getLongitude()))
+						.title(toilet.getName())
 						.icon(BitmapDescriptorFactory
-								.fromResource(R.drawable.icon_locator)));
-				for (Iterator iterator = toilets.iterator(); iterator.hasNext();) {
-					Component toilet = (Component) iterator.next();
-					map.addMarker(new MarkerOptions()
-							.position(
-									new LatLng(toilet.getLatitude(), toilet
-											.getLongitude()))
-							.title(toilet.getName())
-							.icon(BitmapDescriptorFactory
-									.fromResource(R.drawable.icons_toilet_marker)));
-				}
+								.fromResource(R.drawable.icon_toilet_marker)));
 			}
-		} else if (viewType.equals(GlobalConstants.LIST_VIEW)) {
-			listView(GlobalConstants.ONLY_TOILETS);
 		}
 	}
-
 	public void onlyTrashCans(View view) {
-		filterType = GlobalConstants.ONLY_TRASH;
-		ImageView imageView = (ImageView) findViewById(R.id.imageView6);
+		ImageView imageView=(ImageView) findViewById(R.id.imageView6);
 		imageView.setImageResource(R.drawable.icon_dustbin);
-		imageView = (ImageView) findViewById(R.id.imageView4);
+		imageView=(ImageView) findViewById(R.id.imageView4);
 		imageView.setImageResource(R.drawable.icon_view_all_deslect);
-		imageView = (ImageView) findViewById(R.id.imageView5);
+		imageView=(ImageView) findViewById(R.id.imageView5);
 		imageView.setImageResource(R.drawable.icon_toilet_deselect);
-		if (viewType.equals(GlobalConstants.MAP_VIEW)) {
-			map.clear();
-			if (trashcans.size() > 0 && latitude != 0 && longitude != 0) {
+		map.clear();
+		if (trashcans.size() > 0 && latitude != 0 && longitude != 0) {
+			map.addMarker(new MarkerOptions()
+					.position(new LatLng(latitude, longitude))
+					.title("You")
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.icon_locator)));
+			for (Iterator iterator = trashcans.iterator(); iterator.hasNext();) {
+				Component toilet = (Component) iterator.next();
 				map.addMarker(new MarkerOptions()
-						.position(new LatLng(latitude, longitude))
-						.title("You")
+						.position(
+								new LatLng(toilet.getLatitude(), toilet
+										.getLongitude()))
+						.title(toilet.getName())
 						.icon(BitmapDescriptorFactory
-								.fromResource(R.drawable.icon_locator)));
-				for (Iterator iterator = trashcans.iterator(); iterator
-						.hasNext();) {
-					Component toilet = (Component) iterator.next();
-					map.addMarker(new MarkerOptions()
-							.position(
-									new LatLng(toilet.getLatitude(), toilet
-											.getLongitude()))
-							.title(toilet.getName())
-							.icon(BitmapDescriptorFactory
-									.fromResource(R.drawable.icon_dustbin_marker)));
-				}
+								.fromResource(R.drawable.icon_dustbin_marker)));
 			}
-		} else if (viewType.equals(GlobalConstants.LIST_VIEW)) {
-			listView(GlobalConstants.ONLY_TRASH);
 		}
-
+		
 	}
-
 	public void viewAll(View view) {
-		ImageView imageView = (ImageView) findViewById(R.id.imageView4);
+		ImageView imageView=(ImageView) findViewById(R.id.imageView4);
 		imageView.setImageResource(R.drawable.icon_view_all);
-		imageView = (ImageView) findViewById(R.id.imageView5);
+		imageView=(ImageView) findViewById(R.id.imageView5);
 		imageView.setImageResource(R.drawable.icon_toilet_deselect);
-		imageView = (ImageView) findViewById(R.id.imageView6);
+		imageView=(ImageView) findViewById(R.id.imageView6);
 		imageView.setImageResource(R.drawable.icon_dustbin_deselect);
-		filterType = GlobalConstants.VIEW_ALL;
-		if (viewType.equals(GlobalConstants.MAP_VIEW)) {
-			map.clear();
-			if ((toilets.size() > 0 || trashcans.size() > 0) && latitude != 0
-					&& longitude != 0) {
+		map.clear();
+		if ((toilets.size() >0 || trashcans.size() > 0) && latitude != 0 && longitude != 0) {
+			map.addMarker(new MarkerOptions()
+					.position(new LatLng(latitude, longitude))
+					.title("You")
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.icon_locator)));
+			for (Iterator iterator = trashcans.iterator(); iterator.hasNext();) {
+				Component toilet = (Component) iterator.next();
 				map.addMarker(new MarkerOptions()
-						.position(new LatLng(latitude, longitude))
-						.title("You")
+						.position(
+								new LatLng(toilet.getLatitude(), toilet
+										.getLongitude()))
+						.title(toilet.getName())
 						.icon(BitmapDescriptorFactory
-								.fromResource(R.drawable.icon_locator)));
-				for (Iterator iterator = trashcans.iterator(); iterator
-						.hasNext();) {
-					Component toilet = (Component) iterator.next();
-					map.addMarker(new MarkerOptions()
-							.position(
-									new LatLng(toilet.getLatitude(), toilet
-											.getLongitude()))
-							.title(toilet.getName())
-							.icon(BitmapDescriptorFactory
-									.fromResource(R.drawable.icon_dustbin_marker)));
-				}
+								.fromResource(R.drawable.icon_dustbin_marker)));
 			}
-			if (toilets.size() > 0 && latitude != 0 && longitude != 0) {
-				for (Iterator iterator = toilets.iterator(); iterator.hasNext();) {
-					Component toilet = (Component) iterator.next();
-					map.addMarker(new MarkerOptions()
-							.position(
-									new LatLng(toilet.getLatitude(), toilet
-											.getLongitude()))
-							.title(toilet.getName())
-							.icon(BitmapDescriptorFactory
-									.fromResource(R.drawable.icons_toilet_marker)));
-				}
+		}
+		if (toilets.size() > 0 && latitude != 0 && longitude != 0) {
+			for (Iterator iterator = toilets.iterator(); iterator.hasNext();) {
+				Component toilet = (Component) iterator.next();
+				map.addMarker(new MarkerOptions()
+						.position(
+								new LatLng(toilet.getLatitude(), toilet
+										.getLongitude()))
+						.title(toilet.getName())
+						.icon(BitmapDescriptorFactory
+								.fromResource(R.drawable.icon_toilet_marker)));
 			}
-		} else if (viewType.equals(GlobalConstants.LIST_VIEW)) {
-			listView(GlobalConstants.VIEW_ALL);
 		}
 	}
-
-	public void listView(View view) {
-		viewType = GlobalConstants.LIST_VIEW;
-		findViewById(R.id.map).setLayoutParams(new LayoutParams(0, 0));
-		ListView listView = (ListView) findViewById(R.id.list1);
-		listView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT));
-
-		ImageView imageView = (ImageView) findViewById(R.id.imageView3);
-		imageView.setImageResource(R.drawable.icon_list_view);
-		imageView = (ImageView) findViewById(R.id.imageView2);
-		imageView.setImageResource(R.drawable.icon_map_view_deselect);
-		ArrayList<Component> components = null;
-		if (filterType.equals(GlobalConstants.VIEW_ALL)) {
-			components = new ArrayList<Component>(toilets);
-			components.addAll(trashcans);
-		} else if (filterType.equals(GlobalConstants.ONLY_TOILETS)) {
-			components = toilets;
-		} else if (filterType.equals(GlobalConstants.ONLY_TRASH)) {
-			components = trashcans;
-		}
-		Collections.sort(components, new ComponentComparatore());
-		CustomizedAdapter adapter = new CustomizedAdapter(this,
-				R.layout.activity_list_view, components);
-		listView.setAdapter(adapter);
-
+	public void listView(View view){
+	findViewById(R.id.map).setLayoutParams(new LayoutParams(0,0));;
+	ListView listView=(ListView) findViewById(R.id.list1);
+	listView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));
+	
+	ImageView imageView=(ImageView) findViewById(R.id.imageView3);
+	imageView.setImageResource(R.drawable.icon_list_view);
+	imageView=(ImageView) findViewById(R.id.imageView2);
+	imageView.setImageResource(R.drawable.icon_map_view_deselect);
+	
+	ArrayList<Component> components=toilets;
+	components.addAll(trashcans);
+	Collections.sort(components,new ComponentComparatore());
+    CustomizedAdapter adapter=new CustomizedAdapter(this, R.layout.activity_list_view,toilets);
+    listView.setAdapter(adapter);
+	
 	}
-
-	public void listView(String filter) {
-		findViewById(R.id.map).setLayoutParams(new LayoutParams(0, 0));
-		ListView listView = (ListView) findViewById(R.id.list1);
-		listView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
-				LayoutParams.FILL_PARENT));
-		ImageView imageView = (ImageView) findViewById(R.id.imageView3);
-		imageView.setImageResource(R.drawable.icon_list_view);
-		imageView = (ImageView) findViewById(R.id.imageView2);
-		imageView.setImageResource(R.drawable.icon_map_view_deselect);
-		ArrayList<Component> components = null;
-		if (filter.equals(GlobalConstants.VIEW_ALL)) {
-			components = new ArrayList<Component>(toilets);
-			components.addAll(trashcans);
-		} else if (filter.equals(GlobalConstants.ONLY_TOILETS)) {
-			components = toilets;
-		} else if (filter.equals(GlobalConstants.ONLY_TRASH)) {
-			components = trashcans;
-		}
-		Collections.sort(components, new ComponentComparatore());
-		CustomizedAdapter adapter = new CustomizedAdapter(this,
-				R.layout.activity_list_view, components);
-		listView.setAdapter(adapter);
-
-	}
-
-	public void mapView(View view) {
-		viewType = GlobalConstants.MAP_VIEW;
-		findViewById(R.id.list1).setLayoutParams(new LayoutParams(0, 0));
-		findViewById(R.id.map).setLayoutParams(
-				new LayoutParams(LayoutParams.FILL_PARENT,
-						LayoutParams.FILL_PARENT));
-		ImageView imageView = (ImageView) findViewById(R.id.imageView2);
+	
+	public void mapView(View view){
+		findViewById(R.id.list1).setLayoutParams(new LayoutParams(0,0));
+		findViewById(R.id.map).setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,LayoutParams.FILL_PARENT));;		
+		ImageView imageView=(ImageView) findViewById(R.id.imageView2);
 		imageView.setImageResource(R.drawable.icon_map_view);
-		imageView = (ImageView) findViewById(R.id.imageView3);
+		imageView=(ImageView) findViewById(R.id.imageView3);
 		imageView.setImageResource(R.drawable.icon_list_view_deselect);
-	}
-
-	@Override
-	public void onInfoWindowClick(Marker marker) {
-
-		LatLng destAddr = marker.getPosition();
-		Double destLat = destAddr.latitude;
-		Double destLon = destAddr.longitude;
-
-		Double srcLat = cLocation.latitude;
-		Double srcLon = cLocation.longitude;
-
-		// System.out.println("URL = " + Uri.parse(
-		// "http://maps.google.com/maps?" +
-		// "saddr=" + srcLat + "," + srcLon + "&daddr=" + destLat + "," +
-		// destLon));
-
-		final Intent intent = new Intent(Intent.ACTION_VIEW,
-		/** Using the web based turn by turn directions url. */
-
-		Uri.parse("http://maps.google.com/maps?" + "saddr=" + srcLat + ","
-				+ srcLon + "&daddr=" + destLat + "," + destLon));
-
-		intent.setClassName("com.google.android.apps.maps",
-				"com.google.android.maps.MapsActivity");
-		startActivity(intent);
-	}
-
-	public void getDirections(View view) {
-		ImageView view2 = (ImageView) view;
-		String contentDescription = (String) view2.getContentDescription();
-		String[] str = contentDescription.split("\\$");
-		if (str.length == 2) {
-			Double destLat = Double.parseDouble(str[0]);
-			Double destLon = Double.parseDouble(str[1]);
-			final Intent intent = new Intent(Intent.ACTION_VIEW,
-			/** Using the web based turn by turn directions url. */
-
-			Uri.parse("http://maps.google.com/maps?" + "saddr=" + latitude
-					+ "," + longitude + "&daddr=" + destLat + "," + destLon));
-
-			intent.setClassName("com.google.android.apps.maps",
-					"com.google.android.maps.MapsActivity");
-			startActivity(intent);
 		}
-
-	}
-
 	@Override
-	protected void onResume() {
-
-		findViewById(R.id.map).setLayoutParams(
-				new LayoutParams(LayoutParams.FILL_PARENT,
-						LayoutParams.FILL_PARENT));
-		super.onResume();
-	}
-
-	@Override
-	protected void onPause() {
-		findViewById(R.id.map).setLayoutParams(new LayoutParams(0, 0));
-		super.onPause();
+    public void onInfoWindowClick(Marker marker) {
+	
+		   LatLng destAddr = marker.getPosition();
+		   Double destLat = destAddr.latitude;
+		   Double destLon = destAddr.longitude;
+		   
+		   Double srcLat = cLocation.latitude;
+		   Double srcLon = cLocation.longitude;
+		   
+		   
+		   //System.out.println("URL = " + Uri.parse(
+	         //       "http://maps.google.com/maps?" +
+	         //       "saddr=" + srcLat + "," + srcLon + "&daddr=" + destLat + "," + destLon));
+	                
+		   
+		   
+	       final Intent intent = new Intent(Intent.ACTION_VIEW,
+	       /** Using the web based turn by turn directions url. */
+	    		
+	       Uri.parse(
+	                "http://maps.google.com/maps?" +
+	                "saddr=" + srcLat + "," + srcLon + "&daddr=" + destLat + "," + destLon));
+	                
+	       intent.setClassName(
+	                 "com.google.android.apps.maps",
+	                 "com.google.android.maps.MapsActivity");
+	       startActivity(intent);
+       	}
+	
+	public void getDirections(View view){
+		ImageView view2=(ImageView) view;
+		String contentDescription=(String) view2.getContentDescription();
+		String[] str=contentDescription.split("\\$");
+		if(str.length==2){
+			 Double destLat=Double.parseDouble(str[0]);
+			 Double destLon=Double.parseDouble(str[1]);
+			 final Intent intent = new Intent(Intent.ACTION_VIEW,
+				       /** Using the web based turn by turn directions url. */
+				    		
+				       Uri.parse(
+				                "http://maps.google.com/maps?" +
+				                "saddr=" + latitude + "," + longitude + "&daddr=" + destLat + "," + destLon));
+				                
+				       intent.setClassName(
+				                 "com.google.android.apps.maps",
+				                 "com.google.android.maps.MapsActivity");
+				       startActivity(intent);
+		}
+		
 	}
 }

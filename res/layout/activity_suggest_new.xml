@@ -1,47 +1,14 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="#404041"
-    android:orientation="vertical" >
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SuggestNew" >
 
-    <ImageView
-        android:id="@+id/imageView1"
-        android:layout_width="176dp"
-        android:layout_height="36dp"
-        android:background="#404041"
-                  android:layout_marginLeft="8dp"
-        android:src="@drawable/tandtheader" />
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="36dp"
-        android:layout_marginBottom="1dp"
-        android:background="#B2D34C"
-        android:orientation="horizontal" >
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="@string/suggest_heading"
-            android:textColor="#283018"
-            android:textSize="20sp"
-            android:gravity="center_vertical"
-            android:paddingLeft="13dp"
-            android:textStyle="bold|italic" />
-        </LinearLayout>
-            <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="36dp"
-        android:layout_marginBottom="1dp"
-        android:background="#B2D34C"
-        android:orientation="horizontal" >
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:text="@string/suggest_heading"
-            android:textColor="#283018"
-            android:textSize="20sp"
-            android:gravity="center_vertical"
-            android:paddingLeft="5dp"
-            android:textStyle="bold" />
-        </LinearLayout>
-    
-</LinearLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:text="@string/hello_world" />
+
+</RelativeLayout>
