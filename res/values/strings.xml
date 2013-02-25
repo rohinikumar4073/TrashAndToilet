@@ -25,5 +25,14 @@
     <string name="title_activity_androidtab">AndroidTab</string>
     <string name="title_activity_add_new">AddNew</string>
     <string name="title_activity_suggest_new">SuggestNew</string>
-
+    <string name="title_activity_info">Info</string>
+    <string name="suggest_heading">What are you suggesting?</string>
+    <string name="report_heading">Please fill report below</string>
+    <string name="report_information">Information</string>
+    <string name="report_type">Select what to report</string>
+    <string name="location_here">Report for this location</string>
+    <string name="location_elsewhere">Report for different location</string>    
+    
+     <string name="map_text">Long Press to add a location</string>    
+    
 </resources>

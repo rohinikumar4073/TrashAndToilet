@@ -25,8 +25,8 @@
 
     <application
         android:allowBackup="true"
-          android:logo="@drawable/icon_launcher"
-        android:theme="@android:style/Theme.NoTitleBar">
+        android:logo="@drawable/icon_launcher"
+        android:theme="@android:style/Theme.NoTitleBar" >
         <activity
             android:name="com.trashandtoilet.MainActivity"
             android:label="@string/app_name" >
@@ -37,7 +37,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.trashandtoilet.SearchToilet"
+            android:name="com.trashandtoilet.SearchTrashAndToilets"
             android:label="@string/title_activity_search_toilet" />
         <activity
             android:name="com.trashandtoilet.SearchTrash"
@@ -77,7 +77,8 @@
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.trashandtoilet.MainActivity" />
-        </activity>s
+        </activity>
+s
         <activity
             android:name="com.trashandtoilet.AndroidTabActivity"
             android:label="@string/title_activity_androidtab" >
@@ -87,7 +88,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-         <activity
+        <activity
             android:name="com.trashandtoilet.AndroidTabMainActivity"
             android:label="@string/title_activity_androidtab" >
         </activity>
@@ -113,11 +114,16 @@
         </activity>
         <activity
             android:name="com.trashandtoilet.AddNew"
-            android:label="@string/title_activity_add_new" >
+            android:label="@string/title_activity_add_new"
+            android:process=":SecondMapProcess">
         </activity>
         <activity
             android:name="com.trashandtoilet.SuggestNew"
             android:label="@string/title_activity_suggest_new" >
+        </activity>
+        <activity
+            android:name="com.trashandtoilet.Info"
+            android:label="@string/title_activity_info" >
         </activity>
     </application>
 
