@@ -1,14 +1,162 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".AddNew" >
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#404041"
+    android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:text="@string/hello_world" />
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="176dp"
+        android:layout_height="36dp"
+        android:layout_marginLeft="8dp"
+        android:background="#404041"
+        android:src="@drawable/tandtheader" />
 
-</RelativeLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="36dp"
+        android:layout_marginBottom="1dp"
+        android:background="#B2D34C"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center_vertical"
+            android:paddingLeft="13dp"
+            android:text="@string/report_heading"
+            android:textColor="#283018"
+            android:textSize="20sp"
+            android:textStyle="bold|italic" />
+    </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="527dp"
+            android:orientation="vertical" >
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="50dp"
+                android:layout_marginBottom="1dp"
+                android:background="#d6E485"
+                android:orientation="horizontal" >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="13dp"
+                    android:text="@string/report_type"
+                    android:textColor="#283018"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="fill_parent"
+                    android:layout_height="36dp"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="1dp"
+                    android:layout_marginRight="10dp"
+                    android:background="#d6E485"
+                    android:gravity="center|right"
+                    android:orientation="horizontal" >
+
+                    <ImageView
+                        android:id="@+id/imageView2"
+                        android:layout_width="48dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/border"
+                        android:onClick="clickedToilet"
+                        android:src="@drawable/icon_toilet_deselect" />
+
+                    <ImageView
+                        android:id="@+id/imageView3"
+                        android:layout_width="48dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:background="@drawable/border"
+                        android:gravity="right"
+                        android:onClick="clickedDustbin"
+                        android:src="@drawable/icon_dustbin_deselect" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="100dp"
+                android:layout_marginBottom="1dp"
+                android:background="#d6E485"
+                android:orientation="horizontal" >
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="100dp"
+                    android:layout_marginBottom="1dp"
+                    android:orientation="vertical" >
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="13dp"
+                        android:text="@string/location_here"
+                        android:textColor="#283018"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="50dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="13dp"
+                        android:text="@string/location_elsewhere"
+                        android:textColor="#283018"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <RadioGroup
+                    xmlns:android="http://schemas.android.com/apk/res/android"
+                    android:layout_width="fill_parent"
+                    android:layout_height="100dp"
+                    android:layout_gravity="center"
+                    android:layout_marginRight="10dp"
+                    android:gravity="center|right"
+                    android:orientation="vertical" >
+
+                    <RadioButton
+                        android:id="@+id/radio_same_location"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/location_here"
+                        android:onClick="onRadioButtonClicked" />
+
+                    <RadioButton
+                        android:id="@+id/radio_different_locaton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:contentDescription="@string/location_elsewhere"
+                        android:onClick="onRadioButtonClicked" />
+                </RadioGroup>
+            </LinearLayout>
+
+           
+
+                <fragment
+                    android:id="@+id/map1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    class="com.google.android.gms.maps.SupportMapFragment" />
+
+                <TextView
+                    android:text="@string/map_text"
+                    android:textColor="#283018"
+                    android:textSize="15sp"
+                    android:layout_width="wrap_content" 
+                    android:layout_height="wrap_content"/>
+            
+        </LinearLayout>
+    
+</LinearLayout>

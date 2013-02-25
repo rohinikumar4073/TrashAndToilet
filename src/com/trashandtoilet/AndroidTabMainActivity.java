@@ -18,7 +18,7 @@ public class AndroidTabMainActivity extends TabActivity {
 	        // Tab for Search
 	        TabSpec search = tabHost.newTabSpec("Search");
 	        search.setIndicator("Search", getResources().getDrawable(R.drawable.icon_search));
-	        Intent searchToilet = new Intent(this, SearchToilet.class);
+	        Intent searchToilet = new Intent(this, SearchTrashAndToilets.class);
 	        search.setContent(searchToilet);
 	 
 	        // Tab for Add
@@ -36,7 +36,7 @@ public class AndroidTabMainActivity extends TabActivity {
 	        // Tab for info
 	        TabSpec info = tabHost.newTabSpec("Info");
 	        info.setIndicator("info", getResources().getDrawable(R.drawable.icon_info));
-	        Intent toiletOnlyIntent = new Intent(this, ViewToilets.class);
+	        Intent toiletOnlyIntent = new Intent(this, Info.class);
 	        info.setContent(toiletOnlyIntent);
 	 
 	        // Adding all TabSpec to TabHost
