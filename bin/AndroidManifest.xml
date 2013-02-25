@@ -25,7 +25,8 @@
 
     <application
         android:allowBackup="true"
-        android:logo="@drawable/icon_launcher"
+        android:logo="@drawable/icon_laucher"
+        android:icon="@drawable/icon_laucher"
         android:theme="@android:style/Theme.NoTitleBar" >
         <activity
             android:name="com.trashandtoilet.MainActivity"
