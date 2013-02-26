@@ -17,26 +17,26 @@ public class AndroidTabMainActivity extends TabActivity {
 	 
 	        // Tab for Search
 	        TabSpec search = tabHost.newTabSpec("Search");
-	        search.setIndicator("Search", getResources().getDrawable(R.drawable.icon_search));
+	        search.setIndicator("", getResources().getDrawable(R.drawable.icon_search));
 	        Intent searchToilet = new Intent(this, SearchTrashAndToilets.class);
 	        search.setContent(searchToilet);
 	 
 	        // Tab for Add
 	        TabSpec addNew = tabHost.newTabSpec("AddNew");
-	        addNew.setIndicator("AddNew", getResources().getDrawable(R.drawable.icon_add));
+	        addNew.setIndicator("", getResources().getDrawable(R.drawable.icon_add));
 	        Intent addNewIntent = new Intent(this, AddNew.class);
 	        addNew.setContent(addNewIntent);
 	       
 	 
 	        // Tab for Suggest
 	        TabSpec suggest = tabHost.newTabSpec("Suggest");
-	        suggest.setIndicator("Suggest", getResources().getDrawable(R.drawable.icon_suggest));
+	        suggest.setIndicator("", getResources().getDrawable(R.drawable.icon_suggest));
 	        Intent suggestIntent = new Intent(this, SuggestNew.class);
 	        suggest.setContent(suggestIntent);
 
 	        // Tab for info
 	        TabSpec info = tabHost.newTabSpec("Info");
-	        info.setIndicator("info", getResources().getDrawable(R.drawable.icon_info));
+	        info.setIndicator("", getResources().getDrawable(R.drawable.icon_info));
 	        Intent toiletOnlyIntent = new Intent(this, Info.class);
 	        info.setContent(toiletOnlyIntent);
 	 

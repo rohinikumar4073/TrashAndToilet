@@ -121,6 +121,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 			map = ((SupportMapFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.map)).getMap();
 			map.moveCamera(CameraUpdateFactory.newCameraPosition(cLocation));
+			if(gps.getLocation()!=null)
 			accuracy=gps.getLocation().getAccuracy();
 		// Vaish
 			if (!GlobalConstants.ADD_NEW.equals(fromView) && !GlobalConstants.SUGGEST_NEW.equals(fromView)) {
