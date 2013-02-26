@@ -6,27 +6,34 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import com.trashandtoilet.AddNew;
 import com.trashandtoilet.GlobalConstants;
 import com.trashandtoilet.dto.Photo;
 import com.trashandtoilet.dto.Component;
+import com.trashandtoilet.dto.Result;
 
 public class TestingParsing {
-	private static final String TAG_RESULTS = "results";
-	private static final String TAG_GEOMETRY = "geometry";
-	private static final String TAG_LOCATION = "location";
-	private static final String TAG_LATITUDE = "lat";
-	private static final String TAG_LONGITUDE = "lng";
-	private static final String TAG_ICON = "icon";
-	private static final String TAG_ID = "id";
-	private static final String TAG_NAME = "name";
-	private static final String TAG_OPENING_HRS = "opening_hours";
-	private static final String TAG_TYPES = "types";
-	private static final String TAG_REFERENCE = "reference";
-	private static final String OPEN_NOW = "open_now";
-	private static final String TAG_PHOTOS = "photos";
-	private static final String TAG_HEIGHT = "height";
-	private static final String TAG_WIDTH = "width";
-	private static final String TAG_PHOTO_REFERENCE = "photo_reference";
+
+
+	public static final String TAG_RESULTS = "results";
+	public static final String TAG_GEOMETRY = "geometry";
+	public static final String TAG_LOCATION = "location";
+	public static final String TAG_LATITUDE = "lat";
+	public static final String TAG_LONGITUDE = "lng";
+	public static final String TAG_ICON = "icon";
+	public static final String TAG_ID = "id";
+	public static final String TAG_NAME = "name";
+	public static final String TAG_OPENING_HRS = "opening_hours";
+	public static final String TAG_TYPES = "types";
+	public static final String TAG_REFERENCE = "reference";
+	public static final String OPEN_NOW = "open_now";
+	public static final String TAG_PHOTOS = "photos";
+	public static final String TAG_HEIGHT = "height";
+	public static final String TAG_WIDTH = "width";
+	public static final String TAG_PHOTO_REFERENCE = "photo_reference";
+	public static final String ACCURACY = "accuracy";
+	public static final String LANGUAGE = "language";
+	private static final String TAG_STATUS = "status";
 	public ArrayList<Component> parseJSONObject(JSONObject finalResult, String mode, double latitudeHome, double longitudeHome) {
  	ArrayList<Component> toilets = new ArrayList<Component>();
 		try {
@@ -132,5 +139,22 @@ public class TestingParsing {
 	    private static double rad2deg(double rad) {
 	      return (rad * 180.0 / Math.PI);
 	    }
+
+
+		public void addNewComponent(AddNew addNew) {
+			// TODO Auto-generated method stub
+			
+		}
+
+
+		public Result parseResultJSONObject(JSONObject finalResult) {
+			Result result=new Result();
+			result.setStatus(finalResult.optString(TAG_STATUS));
+			result.setReference(finalResult.optString(TAG_REFERENCE));
+			result.setId(finalResult.optString(TAG_ID));
+			return result;
+
+
+		}
 
 }

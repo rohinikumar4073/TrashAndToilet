@@ -8,11 +8,15 @@ import android.os.Bundle;
 public class MainActivity extends Activity {
 	protected boolean _active = true;
 	protected int _splashTime = 3000;
+	protected static  boolean firstTime=true;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {	
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		if (firstTime) {
+			
+		
 		 Thread splashTread = new Thread() {
 	            @Override
 	            public void run() {
@@ -34,6 +38,11 @@ public class MainActivity extends Activity {
 	                }
 	}
 		 };splashTread.start();
+		 
+		}else{
+			firstTime=false;
+			startActivity(new Intent(this,AndroidTabMainActivity.class));
+		}
 		 
 	}
 	}

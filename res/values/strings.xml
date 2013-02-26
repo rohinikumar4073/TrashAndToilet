@@ -31,8 +31,15 @@
     <string name="report_information">Information</string>
     <string name="report_type">Select what to report</string>
     <string name="location_here">Report for this location</string>
-    <string name="location_elsewhere">Report for different location</string>    
+    <string name="location_elsewhere">Report for different location</string>
+    <string name="confirm">Confirm</string>
+    <string name="map_text">Long Press to add a location</string>
+    <string name="enter_desc">Enter Description</string>
+        <string name="add_report">SAVE REPORT</string>
+        
+                <string name="desc_hint">for ex :- Public Toilet/Dustbin</string>
+        
     
-     <string name="map_text">Long Press to add a location</string>    
     
+   
 </resources>

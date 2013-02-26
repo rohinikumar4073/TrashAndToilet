@@ -32,12 +32,13 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
-import android.widget.RadioGroup.LayoutParams;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
@@ -52,11 +53,13 @@ import com.trashandtoilet.windowadapter.TestingParsing;
 
 @SuppressLint("NewApi")
 public class SearchTrashAndToilets extends FragmentActivity implements
-		OnInfoWindowClickListener /*
-								 * implements' OnMapClickListener,
-								 * OnMapLongClickListener,
-								 * OnCameraChangeListener
-								 */{
+		OnInfoWindowClickListener, OnMapLongClickListener/*
+														 * implements'
+														 * OnMapClickListener,
+														 * OnMapLongClickListener
+														 * ,
+														 * OnCameraChangeListener
+														 */{
 	LatLng cLocation;
 	static final LatLng SecondToilet = new LatLng(17.447729806707645,
 			78.3633230254054);
@@ -65,14 +68,17 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 	public static String viewType = GlobalConstants.MAP_VIEW;
 	public static String filterType = GlobalConstants.VIEW_ALL;
 
-	private GoogleMap map;
-	private static ArrayList<Component> toilets = new ArrayList<Component>();
-	private static ArrayList<Component> trashcans = new ArrayList<Component>();
-	private static double longitude;
-	private static double latitude;
+	public GoogleMap map;
+	public static ArrayList<Component> toilets = new ArrayList<Component>();
+	public static ArrayList<Component> trashcans = new ArrayList<Component>();
+	public static double longitude;
+	public static double latitude;
+	public static float  accuracy;
+
 	private Handler progressBarHandler = new Handler();
 	private int progressBarStatus;
 	private ProgressDialog progressBar;
+	public static String reportingType;
 
 	public GoogleMap getMap() {
 		return map;
@@ -92,9 +98,15 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 
 	@SuppressLint("NewApi")
 	protected void onCreate(Bundle savedInstanceState) {
-		System.out.println("Starting Search");
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search_toilet);
+		String value = "";
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			value = extras.getString(GlobalConstants.FROM_VIEW);
+			reportingType = extras.getString(GlobalConstants.REPORT_TYPE);
+		}
+
 		GPSTracker gps = new GPSTracker(SearchTrashAndToilets.this);
 		// check if GPS enabled
 		if (gps.canGetLocation()) {
@@ -108,53 +120,73 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 
 			map = ((SupportMapFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.map)).getMap();
-			// Vaish
-			map.setOnInfoWindowClickListener(this);
 			map.moveCamera(CameraUpdateFactory.newCameraPosition(cLocation));
-			map.addMarker(new MarkerOptions()
-					.position(new LatLng(latitude, longitude))
-					.title("You")
-					.icon(BitmapDescriptorFactory
-							.fromResource(R.drawable.icon_locator)));
-			progressBar = new ProgressDialog(this);
-			progressBar.setCancelable(true);
-			progressBar.setMessage("Loading Toilets & TrashCans");
-			progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-			progressBar.setProgress(0);
-			progressBar.setMax(100);
-			progressBar.show();
-			progressBarHandler.post(new Runnable() {
-				public void run() {
-					progressBar.setProgress(progressBarStatus);
-				}
-			});
-			if (toilets.size() > 0 || trashcans.size() > 0) {
-				progressBar.dismiss();
-				for (Iterator iterator = toilets.iterator(); iterator.hasNext();) {
-					Component toilet = (Component) iterator.next();
-					map.addMarker(new MarkerOptions()
-							.position(
-									new LatLng(toilet.getLatitude(), toilet
-											.getLongitude()))
-							.title(toilet.getName())
-							.icon(BitmapDescriptorFactory
-									.fromResource(R.drawable.icons_toilet_marker)));
-				}
-				for (Iterator iterator = trashcans.iterator(); iterator
-						.hasNext();) {
-					Component toilet = (Component) iterator.next();
-					map.addMarker(new MarkerOptions()
-							.position(
-									new LatLng(toilet.getLatitude(), toilet
-											.getLongitude()))
-							.title(toilet.getName())
-							.icon(BitmapDescriptorFactory
-									.fromResource(R.drawable.icon_dustbin_marker)));
-				}
+			accuracy=gps.getLocation().getAccuracy();
+		// Vaish
+			if (!"AddNew".equals(value)) {
 
+				map.setOnInfoWindowClickListener(this);
+				map.addMarker(new MarkerOptions()
+						.position(new LatLng(latitude, longitude))
+						.title("You")
+						.icon(BitmapDescriptorFactory
+								.fromResource(R.drawable.icon_locator)));
+				progressBar = new ProgressDialog(this);
+				progressBar.setMessage("Loading Toilets & TrashCans");
+				progressBar.setCancelable(false);
+				progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+				progressBar.setProgress(0);
+				progressBar.setMax(100);
+				progressBar.show();
+				progressBarHandler.post(new Runnable() {
+					public void run() {
+						progressBar.setProgress(progressBarStatus);
+					}
+				});
+				if (toilets.size() > 0 || trashcans.size() > 0) {
+					for (Iterator iterator = toilets.iterator(); iterator
+							.hasNext();) {
+						Component toilet = (Component) iterator.next();
+						map.addMarker(new MarkerOptions()
+								.position(
+										new LatLng(toilet.getLatitude(), toilet
+												.getLongitude()))
+								.title(toilet.getName())
+								.icon(BitmapDescriptorFactory
+										.fromResource(R.drawable.icons_toilet_marker)));
+					}
+					for (Iterator iterator = trashcans.iterator(); iterator
+							.hasNext();) {
+						Component toilet = (Component) iterator.next();
+						map.addMarker(new MarkerOptions()
+								.position(
+										new LatLng(toilet.getLatitude(), toilet
+												.getLongitude()))
+								.title(toilet.getName())
+								.icon(BitmapDescriptorFactory
+										.fromResource(R.drawable.icon_dustbin_marker)));
+					}
+
+				} else {
+					addToiletsAndDustbins(String.valueOf(latitude),
+							String.valueOf(longitude), map);
+				}
 			} else {
-				addToiletsAndDustbins(String.valueOf(latitude),
-						String.valueOf(longitude), map);
+				findViewById(R.id.imageView2).setLayoutParams(
+						new LayoutParams(0, 0));
+				findViewById(R.id.imageView3).setLayoutParams(
+						new LayoutParams(0, 0));
+				findViewById(R.id.imageView4).setLayoutParams(
+						new LayoutParams(0, 0));
+				findViewById(R.id.imageView5).setLayoutParams(
+						new LayoutParams(0, 0));
+				findViewById(R.id.imageView6).setLayoutParams(
+						new LayoutParams(0, 0));
+				findViewById(R.id.mapText).setLayoutParams(
+						new LayoutParams(LayoutParams.FILL_PARENT,
+								LayoutParams.FILL_PARENT));
+
+				map.setOnMapLongClickListener(this);
 			}
 			/*
 			 * map.setOnMapClickListener(this);
@@ -168,7 +200,6 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 			// Ask user to enable GPS/network in settings
 			gps.showSettingsAlert();
 		}
-
 	}
 
 	private void addToiletsAndDustbins(String lat, String lag, GoogleMap map) {
@@ -435,7 +466,8 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 
 	public void listView(View view) {
 		viewType = GlobalConstants.LIST_VIEW;
-		findViewById(R.id.map).setLayoutParams(new LayoutParams(0, 0));
+		findViewById(R.id.map).setLayoutParams(
+				new android.widget.RelativeLayout.LayoutParams(0, 0));
 		ListView listView = (ListView) findViewById(R.id.list1);
 		listView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT));
@@ -461,7 +493,8 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 	}
 
 	public void listView(String filter) {
-		findViewById(R.id.map).setLayoutParams(new LayoutParams(0, 0));
+		findViewById(R.id.map).setLayoutParams(
+				new android.widget.RelativeLayout.LayoutParams(0, 0));
 		ListView listView = (ListView) findViewById(R.id.list1);
 		listView.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
 				LayoutParams.FILL_PARENT));
@@ -488,9 +521,11 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 	public void mapView(View view) {
 		viewType = GlobalConstants.MAP_VIEW;
 		findViewById(R.id.list1).setLayoutParams(new LayoutParams(0, 0));
-		findViewById(R.id.map).setLayoutParams(
-				new LayoutParams(LayoutParams.FILL_PARENT,
-						LayoutParams.FILL_PARENT));
+		findViewById(R.id.map)
+				.setLayoutParams(
+						new android.widget.RelativeLayout.LayoutParams(
+								android.widget.RelativeLayout.LayoutParams.FILL_PARENT,
+								android.widget.RelativeLayout.LayoutParams.FILL_PARENT));
 		ImageView imageView = (ImageView) findViewById(R.id.imageView2);
 		imageView.setImageResource(R.drawable.icon_map_view);
 		imageView = (ImageView) findViewById(R.id.imageView3);
@@ -543,18 +578,52 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 
 	}
 
-	@Override
-	protected void onResume() {
-
-		findViewById(R.id.map).setLayoutParams(
-				new LayoutParams(LayoutParams.FILL_PARENT,
-						LayoutParams.FILL_PARENT));
-		super.onResume();
-	}
+	public static LatLng reportingLatLng;
 
 	@Override
-	protected void onPause() {
-		findViewById(R.id.map).setLayoutParams(new LayoutParams(0, 0));
-		super.onPause();
+	public void onMapLongClick(LatLng latLng) {
+		reportingLatLng=latLng;
+		map.clear();
+		if (GlobalConstants.ONLY_TOILETS.equals(reportingType)) {
+			map.addMarker(new MarkerOptions()
+					.position(latLng)
+					.title("toilet")
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.icons_toilet_marker)));
+		} else if (GlobalConstants.ONLY_TRASH.equals(reportingType)) {
+			map.addMarker(new MarkerOptions()
+					.position(latLng)
+					.title("toilet")
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.icon_dustbin_marker)));
+		} else {
+			map.addMarker(new MarkerOptions()
+					.position(latLng)
+					.title("toilet")
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.icon_marker_black)));
+		}
+		
+		findViewById(R.id.buttonConfirm)
+
+				.setLayoutParams(
+						new android.widget.RelativeLayout.LayoutParams(
+								android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT,
+								android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT));
+		
+		findViewById(R.id.buttonConfirm).setLeft(10);
+		findViewById(R.id.buttonConfirm).setTop(10);
+
 	}
+
+	public void confirmButton(View view) {
+		Intent intent = new Intent(this, AndroidTabMainActivity.class);
+		intent.putExtra(GlobalConstants.LAT, reportingLatLng.latitude);
+		intent.putExtra(GlobalConstants.LONG, reportingLatLng.longitude);
+		intent.putExtra(GlobalConstants.FROM_VIEW, GlobalConstants.REPORTING);
+		intent.putExtra(GlobalConstants.REPORT_TYPE, reportingType);
+		startActivity(intent);
+
+	}
+
 }

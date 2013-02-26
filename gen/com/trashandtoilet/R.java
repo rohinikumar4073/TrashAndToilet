@@ -150,46 +150,51 @@ containing a value of this type.
         public static final int icon_locator=0x7f020010;
         public static final int icon_map_view=0x7f020011;
         public static final int icon_map_view_deselect=0x7f020012;
-        public static final int icon_search=0x7f020013;
-        public static final int icon_search_deselected=0x7f020014;
-        public static final int icon_search_selected=0x7f020015;
-        public static final int icon_suggest=0x7f020016;
-        public static final int icon_suggest_deselected=0x7f020017;
-        public static final int icon_suggest_selected=0x7f020018;
-        public static final int icon_toilet_deselect=0x7f020019;
-        public static final int icon_toilet_list_view=0x7f02001a;
-        public static final int icon_toliets_only=0x7f02001b;
-        public static final int icon_view_all=0x7f02001c;
-        public static final int icon_view_all_deslect=0x7f02001d;
-        public static final int iconfinal=0x7f02001e;
-        public static final int icons_toilet_marker=0x7f02001f;
-        public static final int launch=0x7f020020;
-        public static final int tandtheader=0x7f020021;
+        public static final int icon_marker=0x7f020013;
+        public static final int icon_marker_black=0x7f020014;
+        public static final int icon_search=0x7f020015;
+        public static final int icon_search_deselected=0x7f020016;
+        public static final int icon_search_selected=0x7f020017;
+        public static final int icon_suggest=0x7f020018;
+        public static final int icon_suggest_deselected=0x7f020019;
+        public static final int icon_suggest_selected=0x7f02001a;
+        public static final int icon_toilet_deselect=0x7f02001b;
+        public static final int icon_toilet_list_view=0x7f02001c;
+        public static final int icon_toliets_only=0x7f02001d;
+        public static final int icon_view_all=0x7f02001e;
+        public static final int icon_view_all_deslect=0x7f02001f;
+        public static final int iconfinal=0x7f020020;
+        public static final int icons_toilet_marker=0x7f020021;
+        public static final int launch=0x7f020022;
+        public static final int tandtheader=0x7f020023;
     }
     public static final class id {
-        public static final int globalHeader=0x7f04000a;
+        public static final int button1=0x7f04000a;
+        public static final int buttonConfirm=0x7f040017;
+        public static final int editText1=0x7f040009;
+        public static final int globalHeader=0x7f04000b;
         public static final int imageView1=0x7f040004;
         public static final int imageView2=0x7f040005;
         public static final int imageView3=0x7f040006;
-        public static final int imageView4=0x7f040011;
-        public static final int imageView5=0x7f040012;
-        public static final int imageView6=0x7f040013;
-        public static final int imgIcon1=0x7f04000b;
-        public static final int imgIcon2=0x7f04000e;
-        public static final int list1=0x7f040015;
-        public static final int map=0x7f040014;
-        public static final int map1=0x7f040009;
-        public static final int menu_settings=0x7f040016;
+        public static final int imageView4=0x7f040012;
+        public static final int imageView5=0x7f040013;
+        public static final int imageView6=0x7f040014;
+        public static final int imgIcon1=0x7f04000c;
+        public static final int imgIcon2=0x7f04000f;
+        public static final int list1=0x7f040018;
+        public static final int map=0x7f040016;
+        public static final int mapText=0x7f040015;
+        public static final int menu_settings=0x7f040019;
         public static final int none=0x7f040000;
         public static final int normal=0x7f040001;
         public static final int radio_different_locaton=0x7f040008;
         public static final int radio_same_location=0x7f040007;
         public static final int satellite=0x7f040002;
-        public static final int tap_text=0x7f04000f;
-        public static final int tap_text1=0x7f040010;
+        public static final int tap_text=0x7f040010;
+        public static final int tap_text1=0x7f040011;
         public static final int terrain=0x7f040003;
-        public static final int txtTitle1=0x7f04000c;
-        public static final int txtTitle2=0x7f04000d;
+        public static final int txtTitle1=0x7f04000d;
+        public static final int txtTitle2=0x7f04000e;
     }
     public static final class layout {
         public static final int activity_add_new=0x7f030000;
@@ -228,6 +233,7 @@ containing a value of this type.
         public static final int activity_view_trash=0x7f08000d;
     }
     public static final class string {
+        public static final int add_report=0x7f05002d;
         public static final int app_name=0x7f05000b;
         public static final int app_name_1=0x7f05000e;
         /**  Button in confirmation dialog to enable Google Play services.  Clicking it
@@ -273,11 +279,14 @@ containing a value of this type.
         Google Play services (from Play Store) [CHAR LIMIT=40] 
          */
         public static final int common_google_play_services_update_title=0x7f050007;
+        public static final int confirm=0x7f05002a;
+        public static final int desc_hint=0x7f05002e;
         public static final int dustbinicon=0x7f050014;
+        public static final int enter_desc=0x7f05002c;
         public static final int hello_world=0x7f05000c;
         public static final int location_elsewhere=0x7f050029;
         public static final int location_here=0x7f050028;
-        public static final int map_text=0x7f05002a;
+        public static final int map_text=0x7f05002b;
         public static final int menu_settings=0x7f05000d;
         public static final int report_heading=0x7f050025;
         public static final int report_information=0x7f050026;

@@ -26,6 +26,7 @@ public class AndroidTabMainActivity extends TabActivity {
 	        addNew.setIndicator("AddNew", getResources().getDrawable(R.drawable.icon_add));
 	        Intent addNewIntent = new Intent(this, AddNew.class);
 	        addNew.setContent(addNewIntent);
+	       
 	 
 	        // Tab for Suggest
 	        TabSpec suggest = tabHost.newTabSpec("Suggest");
@@ -44,6 +45,20 @@ public class AndroidTabMainActivity extends TabActivity {
 	        tabHost.addTab(addNew); // Adding New tab
 	        tabHost.addTab(suggest); // Adding Suggest tab
 	        tabHost.addTab(info); // Adding Info tab
+	        
+	        Bundle extras = getIntent().getExtras();
+	        String fromView=null;
+			if (extras != null) {
+				
+				fromView = extras.getString(GlobalConstants.FROM_VIEW);
+				if(GlobalConstants.REPORTING.equals(fromView)){
+				addNewIntent.putExtra(GlobalConstants.REPORT_TYPE,extras.getString(GlobalConstants.REPORT_TYPE));
+				addNewIntent.putExtra(GlobalConstants.LAT,extras.getDouble(GlobalConstants.LAT));
+				addNewIntent.putExtra(GlobalConstants.LONG,extras.getDouble(GlobalConstants.LONG));
+				tabHost.setCurrentTab(1);
+				}
+
+			}
 
 	 }
 	}
