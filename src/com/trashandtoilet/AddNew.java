@@ -245,7 +245,7 @@ public class AddNew extends android.support.v4.app.FragmentActivity {
 		if (content.equals(GlobalConstants.LOCATION_ELSE_WHERE)) {
 			reportingLocationType = GlobalConstants.LOCATION_ELSE_WHERE;
 			Intent intent = new Intent(this, SearchTrashAndToilets.class);
-			intent.putExtra(GlobalConstants.FROM_VIEW, "AddNew");
+			intent.putExtra(GlobalConstants.FROM_VIEW, GlobalConstants.ADD_NEW);
 			intent.putExtra(GlobalConstants.REPORT_TYPE, reportingType);
 			startActivity(intent);
 
@@ -351,8 +351,8 @@ public class AddNew extends android.support.v4.app.FragmentActivity {
 				alertDialog.setMessage(result.getStatus());
 				alertDialog.show();
 			}
-			SearchTrashAndToilets.toilets.clear();
-			SearchTrashAndToilets.trashcans.clear();
+		/*	SearchTrashAndToilets.toilets.clear();
+			SearchTrashAndToilets.trashcans.clear();*/
 
 			
 		}

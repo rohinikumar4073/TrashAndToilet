@@ -17,9 +17,11 @@ public class GlobalConstants {
 	public static final String LAT="latitude"; 
 	public static final String LONG="longitude"; 
 	public static final String FROM_VIEW="fromView";
-	public static final String ADD_REPORT_URL = "maps.googleapis.com/maps/api/place/add/json"; 
-
-
+	public static final String ADD_REPORT_URL = "maps.googleapis.com/maps/api/place/add/json";
+	public static final String SUGGEST_TOILETS = "TandtSuggestType1"; 
+	public static final String SUGGEST_TRASH= "TandtSuggestType2";
+	public static final String ADD_NEW = "addNew"; 
+	public static final String SUGGEST_NEW = "suggestNew"; 
 
 
 }

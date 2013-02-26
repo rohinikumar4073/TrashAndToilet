@@ -79,6 +79,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 	private int progressBarStatus;
 	private ProgressDialog progressBar;
 	public static String reportingType;
+	public static String fromView;
 
 	public GoogleMap getMap() {
 		return map;
@@ -100,10 +101,9 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search_toilet);
-		String value = "";
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
-			value = extras.getString(GlobalConstants.FROM_VIEW);
+			fromView = extras.getString(GlobalConstants.FROM_VIEW);
 			reportingType = extras.getString(GlobalConstants.REPORT_TYPE);
 		}
 
@@ -123,7 +123,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 			map.moveCamera(CameraUpdateFactory.newCameraPosition(cLocation));
 			accuracy=gps.getLocation().getAccuracy();
 		// Vaish
-			if (!"AddNew".equals(value)) {
+			if (!GlobalConstants.ADD_NEW.equals(fromView) && !GlobalConstants.SUGGEST_NEW.equals(fromView)) {
 
 				map.setOnInfoWindowClickListener(this);
 				map.addMarker(new MarkerOptions()
@@ -131,19 +131,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 						.title("You")
 						.icon(BitmapDescriptorFactory
 								.fromResource(R.drawable.icon_locator)));
-				progressBar = new ProgressDialog(this);
-				progressBar.setMessage("Loading Toilets & TrashCans");
-				progressBar.setCancelable(false);
-				progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-				progressBar.setProgress(0);
-				progressBar.setMax(100);
-				progressBar.show();
-				progressBarHandler.post(new Runnable() {
-					public void run() {
-						progressBar.setProgress(progressBarStatus);
-					}
-				});
-				if (toilets.size() > 0 || trashcans.size() > 0) {
+								if (toilets.size() > 0 || trashcans.size() > 0) {
 					for (Iterator iterator = toilets.iterator(); iterator
 							.hasNext();) {
 						Component toilet = (Component) iterator.next();
@@ -168,6 +156,19 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 					}
 
 				} else {
+					progressBar = new ProgressDialog(this);
+					progressBar.setMessage("Loading Toilets & TrashCans");
+					progressBar.setCancelable(true);
+					progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+					progressBar.setProgress(0);
+					progressBar.setMax(100);
+					progressBar.show();
+					progressBarHandler.post(new Runnable() {
+						public void run() {
+							progressBar.setProgress(progressBarStatus);
+						}
+					});
+
 					addToiletsAndDustbins(String.valueOf(latitude),
 							String.valueOf(longitude), map);
 				}
@@ -620,7 +621,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 		Intent intent = new Intent(this, AndroidTabMainActivity.class);
 		intent.putExtra(GlobalConstants.LAT, reportingLatLng.latitude);
 		intent.putExtra(GlobalConstants.LONG, reportingLatLng.longitude);
-		intent.putExtra(GlobalConstants.FROM_VIEW, GlobalConstants.REPORTING);
+		intent.putExtra(GlobalConstants.FROM_VIEW,fromView);
 		intent.putExtra(GlobalConstants.REPORT_TYPE, reportingType);
 		startActivity(intent);
 

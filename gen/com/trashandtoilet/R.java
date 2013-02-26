@@ -280,7 +280,7 @@ containing a value of this type.
          */
         public static final int common_google_play_services_update_title=0x7f050007;
         public static final int confirm=0x7f05002a;
-        public static final int desc_hint=0x7f05002e;
+        public static final int desc_hint=0x7f05002f;
         public static final int dustbinicon=0x7f050014;
         public static final int enter_desc=0x7f05002c;
         public static final int hello_world=0x7f05000c;
@@ -294,6 +294,7 @@ containing a value of this type.
         public static final int search_dustbin=0x7f050010;
         public static final int search_toilet=0x7f05000f;
         public static final int suggest_heading=0x7f050024;
+        public static final int suggest_save=0x7f05002e;
         public static final int title_activity_add_new=0x7f050021;
         public static final int title_activity_androidtab=0x7f050020;
         public static final int title_activity_header_footer=0x7f050018;

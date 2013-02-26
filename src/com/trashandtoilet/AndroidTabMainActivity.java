@@ -51,12 +51,21 @@ public class AndroidTabMainActivity extends TabActivity {
 			if (extras != null) {
 				
 				fromView = extras.getString(GlobalConstants.FROM_VIEW);
-				if(GlobalConstants.REPORTING.equals(fromView)){
+				if(GlobalConstants.ADD_NEW.equals(fromView)){
 				addNewIntent.putExtra(GlobalConstants.REPORT_TYPE,extras.getString(GlobalConstants.REPORT_TYPE));
 				addNewIntent.putExtra(GlobalConstants.LAT,extras.getDouble(GlobalConstants.LAT));
 				addNewIntent.putExtra(GlobalConstants.LONG,extras.getDouble(GlobalConstants.LONG));
+				addNewIntent.putExtra(GlobalConstants.FROM_VIEW, GlobalConstants.ADD_NEW);
 				tabHost.setCurrentTab(1);
 				}
+				else if(GlobalConstants.SUGGEST_NEW.equals(fromView)){
+					suggestIntent.putExtra(GlobalConstants.REPORT_TYPE,extras.getString(GlobalConstants.REPORT_TYPE));
+					suggestIntent.putExtra(GlobalConstants.LAT,extras.getDouble(GlobalConstants.LAT));
+					suggestIntent.putExtra(GlobalConstants.LONG,extras.getDouble(GlobalConstants.LONG));
+					suggestIntent.putExtra(GlobalConstants.FROM_VIEW, GlobalConstants.SUGGEST_NEW);
+
+					tabHost.setCurrentTab(2);
+					}
 
 			}
 

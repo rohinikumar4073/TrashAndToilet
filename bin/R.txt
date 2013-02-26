@@ -122,7 +122,7 @@ int string common_google_play_services_update_button 0x7f05000a
 int string common_google_play_services_update_text 0x7f050008
 int string common_google_play_services_update_title 0x7f050007
 int string confirm 0x7f05002a
-int string desc_hint 0x7f05002e
+int string desc_hint 0x7f05002f
 int string dustbinicon 0x7f050014
 int string enter_desc 0x7f05002c
 int string hello_world 0x7f05000c
@@ -136,6 +136,7 @@ int string report_type 0x7f050027
 int string search_dustbin 0x7f050010
 int string search_toilet 0x7f05000f
 int string suggest_heading 0x7f050024
+int string suggest_save 0x7f05002e
 int string title_activity_add_new 0x7f050021
 int string title_activity_androidtab 0x7f050020
 int string title_activity_header_footer 0x7f050018

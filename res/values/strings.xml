@@ -35,7 +35,9 @@
     <string name="confirm">Confirm</string>
     <string name="map_text">Long Press to add a location</string>
     <string name="enter_desc">Enter Description</string>
-        <string name="add_report">SAVE REPORT</string>
+        <string name="add_report">SAVE REPORT</string>          
+              <string name="suggest_save">SUGGEST</string>
+        
         
                 <string name="desc_hint">for ex :- Public Toilet/Dustbin</string>
         
