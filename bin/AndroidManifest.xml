@@ -40,7 +40,7 @@
         <activity
             android:name="com.trashandtoilet.SearchTrashAndToilets"
             android:label="@string/title_activity_search_toilet" 
-           />
+            android:process=":MapView1"/>
         <activity
             android:name="com.trashandtoilet.SearchTrash"
             android:clearTaskOnLaunch="true"
@@ -117,7 +117,7 @@ s
         <activity
             android:name="com.trashandtoilet.AddNew"
             android:label="@string/title_activity_add_new"
-                       >
+                        android:process=":MapView2">
           
         </activity>
         <activity
