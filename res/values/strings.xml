@@ -35,13 +35,12 @@
     <string name="confirm">Confirm</string>
     <string name="map_text">Long Press to add a location</string>
     <string name="enter_desc">Enter Description</string>
-        <string name="add_report">SAVE REPORT</string>          
-              <string name="suggest_save">SUGGEST</string>
-        
-        
-                <string name="desc_hint">for ex :- Public Toilet/Dustbin</string>
-        
+    <string name="add_report">SAVE REPORT</string>
+    <string name="suggest_save">SUGGEST</string>
+    <string name="why_use">Why use this app</string>
+    <string name="sani_tips">Sanitation tips</string>
+    <string name="desc_hint">for ex :- Public Toilet/Dustbin</string>
+    <string name="content_abt_app1">This APP helps you find toilets and trashcan locations near you. This means that you can help keep your community clean and sanitized by using existing and adding new toilet locations to the app.</string>
+    <string name="content_abt_app2">The more locations you help add to our app the easier it will be for others and yourself to find toilets or trashcans near them.Also, using our APP you can suggest a location for a toilet, that way toilets are built in the places people need them most! </string>
     
-    
-   
 </resources>

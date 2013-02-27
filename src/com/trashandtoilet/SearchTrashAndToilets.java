@@ -61,20 +61,14 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 														 * OnCameraChangeListener
 														 */{
 	LatLng cLocation;
-	static final LatLng SecondToilet = new LatLng(17.447729806707645,
-			78.3633230254054);
-	static final LatLng FirstToilet = new LatLng(17.4438208734482,
-			78.36638074368238);
 	public static String viewType = GlobalConstants.MAP_VIEW;
 	public static String filterType = GlobalConstants.VIEW_ALL;
-
 	public GoogleMap map;
 	public static ArrayList<Component> toilets = new ArrayList<Component>();
 	public static ArrayList<Component> trashcans = new ArrayList<Component>();
 	public static double longitude;
 	public static double latitude;
-	public static float  accuracy;
-
+	public static float accuracy;
 	private Handler progressBarHandler = new Handler();
 	private int progressBarStatus;
 	private ProgressDialog progressBar;
@@ -121,10 +115,11 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 			map = ((SupportMapFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.map)).getMap();
 			map.moveCamera(CameraUpdateFactory.newCameraPosition(cLocation));
-			if(gps.getLocation()!=null)
-			accuracy=gps.getLocation().getAccuracy();
-		// Vaish
-			if (!GlobalConstants.ADD_NEW.equals(fromView) && !GlobalConstants.SUGGEST_NEW.equals(fromView)) {
+			if (gps.getLocation() != null)
+				accuracy = gps.getLocation().getAccuracy();
+			// Vaish
+			if (!GlobalConstants.ADD_NEW.equals(fromView)
+					&& !GlobalConstants.SUGGEST_NEW.equals(fromView)) {
 
 				map.setOnInfoWindowClickListener(this);
 				map.addMarker(new MarkerOptions()
@@ -132,7 +127,8 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 						.title("You")
 						.icon(BitmapDescriptorFactory
 								.fromResource(R.drawable.icon_locator)));
-								if (toilets.size() > 0 || trashcans.size() > 0) {
+				if ((toilets.size() > 0 || trashcans.size() > 0)
+						&& !GlobalConstants.ADD_OR_SUGGESTED) {
 					for (Iterator iterator = toilets.iterator(); iterator
 							.hasNext();) {
 						Component toilet = (Component) iterator.next();
@@ -159,7 +155,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 				} else {
 					progressBar = new ProgressDialog(this);
 					progressBar.setMessage("Loading Toilets & TrashCans");
-					progressBar.setCancelable(true);
+					progressBar.setCancelable(false);
 					progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 					progressBar.setProgress(0);
 					progressBar.setMax(100);
@@ -313,7 +309,6 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 
 		@Override
 		protected void onPostExecute(String result) {
-			progressBar.dismiss();
 
 			if (mode.equals(GlobalConstants.ONLY_TOILETS)) {
 				for (Iterator iterator = toilets.iterator(); iterator.hasNext();) {
@@ -327,6 +322,8 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 									.fromResource(R.drawable.icons_toilet_marker)));
 				}
 			} else if (mode.equals(GlobalConstants.ONLY_TRASH)) {
+				progressBar.dismiss();
+				GlobalConstants.ADD_OR_SUGGESTED=false;
 				for (Iterator iterator = trashcans.iterator(); iterator
 						.hasNext();) {
 					Component toilet = (Component) iterator.next();
@@ -584,7 +581,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 
 	@Override
 	public void onMapLongClick(LatLng latLng) {
-		reportingLatLng=latLng;
+		reportingLatLng = latLng;
 		map.clear();
 		if (GlobalConstants.ONLY_TOILETS.equals(reportingType)) {
 			map.addMarker(new MarkerOptions()
@@ -605,14 +602,14 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 					.icon(BitmapDescriptorFactory
 							.fromResource(R.drawable.icon_marker_black)));
 		}
-		
+
 		findViewById(R.id.buttonConfirm)
 
 				.setLayoutParams(
 						new android.widget.RelativeLayout.LayoutParams(
 								android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT,
 								android.widget.RelativeLayout.LayoutParams.WRAP_CONTENT));
-		
+
 		findViewById(R.id.buttonConfirm).setLeft(10);
 		findViewById(R.id.buttonConfirm).setTop(10);
 
@@ -622,7 +619,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 		Intent intent = new Intent(this, AndroidTabMainActivity.class);
 		intent.putExtra(GlobalConstants.LAT, reportingLatLng.latitude);
 		intent.putExtra(GlobalConstants.LONG, reportingLatLng.longitude);
-		intent.putExtra(GlobalConstants.FROM_VIEW,fromView);
+		intent.putExtra(GlobalConstants.FROM_VIEW, fromView);
 		intent.putExtra(GlobalConstants.REPORT_TYPE, reportingType);
 		startActivity(intent);
 

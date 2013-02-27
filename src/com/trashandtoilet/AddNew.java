@@ -344,6 +344,8 @@ public class AddNew extends android.support.v4.app.FragmentActivity {
 				alertDialog.setTitle("Status");
 				alertDialog.setMessage("Succesfully added !");
 				alertDialog.show();
+				GlobalConstants.ADD_OR_SUGGESTED=true;
+
 
 			}else{
 				AlertDialog alertDialog = new AlertDialog.Builder(context).create();
