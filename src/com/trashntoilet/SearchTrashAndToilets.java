@@ -25,6 +25,7 @@ import org.json.JSONObject;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -116,8 +117,9 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 			map = ((SupportMapFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.map)).getMap();
 			map.moveCamera(CameraUpdateFactory.newCameraPosition(cLocation));
-			if (gps.getLocation() != null)
-				accuracy = gps.getLocation().getAccuracy();
+			Location locationNew=gps.getLocationDefault();
+			if (locationNew!= null)
+				accuracy = locationNew.getAccuracy();
 			// Vaish
 			if (!GlobalConstants.ADD_NEW.equals(fromView)
 					&& !GlobalConstants.SUGGEST_NEW.equals(fromView)) {

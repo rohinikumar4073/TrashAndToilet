@@ -44,6 +44,9 @@ public class GPSTracker extends Service implements LocationListener {
        getLocation();
    }
 
+   public Location getLocationDefault(){
+	   return this.location;
+   }
    public Location getLocation() {
        try {
            locationManager = (LocationManager) mContext
