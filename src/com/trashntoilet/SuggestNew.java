@@ -346,9 +346,9 @@ public class SuggestNew extends Activity {
 				alertDialog.setMessage(result.getStatus());
 				alertDialog.show();
 			}
-			SearchTrashAndToilets.toilets.clear();
+	/*		SearchTrashAndToilets.toilets.clear();
 			SearchTrashAndToilets.trashcans.clear();
-
+*/
 			
 		}
 		private URI getUrl() {
