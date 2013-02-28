@@ -322,8 +322,8 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 							.icon(BitmapDescriptorFactory
 									.fromResource(R.drawable.icons_toilet_marker)));
 				}
+				//progressBar.dismiss();
 			} else if (mode.equals(GlobalConstants.ONLY_TRASH)) {
-				progressBar.dismiss();
 				GlobalConstants.ADD_OR_SUGGESTED=false;
 				for (Iterator iterator = trashcans.iterator(); iterator
 						.hasNext();) {
@@ -337,7 +337,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 									.fromResource(R.drawable.icon_dustbin_marker)));
 				}
 			}
-
+			progressBar.dismiss();
 		}
 
 		@SuppressWarnings("unused")
