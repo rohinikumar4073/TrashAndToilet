@@ -8,6 +8,7 @@ import org.json.JSONObject;
 
 import com.trashntoilet.AddNew;
 import com.trashntoilet.GlobalConstants;
+import com.trashntoilet.SearchTrashAndToilets;
 import com.trashntoilet.dto.Component;
 import com.trashntoilet.dto.Photo;
 import com.trashntoilet.dto.Result;
@@ -79,6 +80,7 @@ public class TestingParsing {
 				if (openingHrs != null) {
 					Boolean openNow = openingHrs.optBoolean(OPEN_NOW);
 					toilet.setOpenNow(openNow);
+					toilet.setOpeningHours(GlobalConstants.NOT_EMPTY);
 				}
 				Photo photo = new Photo();
 				JSONArray photos = object.optJSONArray(TAG_PHOTOS);
@@ -101,7 +103,6 @@ public class TestingParsing {
 				}
 				toilet.setDistance(distance(latitudeHome, longitudeHome, toilet.getLatitude(), toilet.getLongitude(), 'K'));
 				toilets.add(toilet);
-
 				}
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block

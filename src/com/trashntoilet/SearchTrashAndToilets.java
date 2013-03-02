@@ -7,6 +7,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
@@ -24,7 +25,11 @@ import org.json.JSONObject;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -33,11 +38,14 @@ import android.os.Handler;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.InfoWindowAdapter;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.SupportMapFragment;
@@ -117,13 +125,13 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 			map = ((SupportMapFragment) getSupportFragmentManager()
 					.findFragmentById(R.id.map)).getMap();
 			map.moveCamera(CameraUpdateFactory.newCameraPosition(cLocation));
-			Location locationNew=gps.getLocationDefault();
-			if (locationNew!= null)
+			Location locationNew = gps.getLocationDefault();
+			if (locationNew != null)
 				accuracy = locationNew.getAccuracy();
 			// Vaish
 			if (!GlobalConstants.ADD_NEW.equals(fromView)
 					&& !GlobalConstants.SUGGEST_NEW.equals(fromView)) {
-
+				map.setInfoWindowAdapter(new MarkerWindowAdapter(this));
 				map.setOnInfoWindowClickListener(this);
 				map.addMarker(new MarkerOptions()
 						.position(new LatLng(latitude, longitude))
@@ -132,27 +140,57 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 								.fromResource(R.drawable.icon_locator)));
 				if ((toilets.size() > 0 || trashcans.size() > 0)
 						&& !GlobalConstants.ADD_OR_SUGGESTED) {
+
 					for (Iterator iterator = toilets.iterator(); iterator
 							.hasNext();) {
 						Component toilet = (Component) iterator.next();
-						map.addMarker(new MarkerOptions()
-								.position(
-										new LatLng(toilet.getLatitude(), toilet
-												.getLongitude()))
-								.title(toilet.getName())
-								.icon(BitmapDescriptorFactory
-										.fromResource(R.drawable.icons_toilet_marker)));
+						String status = "";
+						if (GlobalConstants.NOT_EMPTY.equals(toilet
+								.getOpeningHours())) {
+							if (toilet.getOpenNow())
+								status = "Opened";
+							else
+								status = "Closed";
+						}
+						Marker marker = map
+								.addMarker(new MarkerOptions()
+										.position(
+												new LatLng(
+														toilet.getLatitude(),
+														toilet.getLongitude()))
+										.title(toilet.getName())
+										.icon(BitmapDescriptorFactory
+												.fromResource(R.drawable.icons_toilet_marker)));
+						if (!status.equals("")) {
+							marker.setSnippet(status);
+
+						}
 					}
 					for (Iterator iterator = trashcans.iterator(); iterator
 							.hasNext();) {
+
 						Component toilet = (Component) iterator.next();
-						map.addMarker(new MarkerOptions()
-								.position(
-										new LatLng(toilet.getLatitude(), toilet
-												.getLongitude()))
-								.title(toilet.getName())
-								.icon(BitmapDescriptorFactory
-										.fromResource(R.drawable.icon_dustbin_marker)));
+						String status = "";
+						if (GlobalConstants.NOT_EMPTY.equals(toilet
+								.getOpeningHours())) {
+							if (toilet.getOpenNow())
+								status = "Opened";
+							else
+								status = "Closed";
+						}
+						Marker marker = map
+								.addMarker(new MarkerOptions()
+										.position(
+												new LatLng(
+														toilet.getLatitude(),
+														toilet.getLongitude()))
+										.title(toilet.getName())
+										.icon(BitmapDescriptorFactory
+												.fromResource(R.drawable.icon_dustbin_marker)));
+						if (!status.equals("")) {
+							marker.setSnippet(status);
+
+						}
 					}
 
 				} else {
@@ -312,31 +350,57 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 
 		@Override
 		protected void onPostExecute(String result) {
-
 			if (mode.equals(GlobalConstants.ONLY_TOILETS)) {
 				for (Iterator iterator = toilets.iterator(); iterator.hasNext();) {
 					Component toilet = (Component) iterator.next();
-					map.addMarker(new MarkerOptions()
-							.position(
-									new LatLng(toilet.getLatitude(), toilet
-											.getLongitude()))
-							.title(toilet.getName())
-							.icon(BitmapDescriptorFactory
-									.fromResource(R.drawable.icons_toilet_marker)));
+					String status = "";
+					if (GlobalConstants.NOT_EMPTY.equals(toilet
+							.getOpeningHours())) {
+						if (toilet.getOpenNow())
+							status = "Opened";
+						else
+							status = "Closed";
+					}
+					Marker marker = map
+							.addMarker(new MarkerOptions()
+									.position(
+											new LatLng(toilet.getLatitude(),
+													toilet.getLongitude()))
+									.title(toilet.getName())
+									.icon(BitmapDescriptorFactory
+											.fromResource(R.drawable.icons_toilet_marker)));
+					if (!status.equals("")) {
+						marker.setSnippet(status);
+
+					}
+
 				}
-				//progressBar.dismiss();
+				// progressBar.dismiss();
 			} else if (mode.equals(GlobalConstants.ONLY_TRASH)) {
-				GlobalConstants.ADD_OR_SUGGESTED=false;
+				GlobalConstants.ADD_OR_SUGGESTED = false;
 				for (Iterator iterator = trashcans.iterator(); iterator
 						.hasNext();) {
 					Component toilet = (Component) iterator.next();
-					map.addMarker(new MarkerOptions()
-							.position(
-									new LatLng(toilet.getLatitude(), toilet
-											.getLongitude()))
-							.title(toilet.getName())
-							.icon(BitmapDescriptorFactory
-									.fromResource(R.drawable.icon_dustbin_marker)));
+					String status = "";
+					if (GlobalConstants.NOT_EMPTY.equals(toilet
+							.getOpeningHours())) {
+						if (toilet.getOpenNow())
+							status = "Opened";
+						else
+							status = "Closed";
+					}
+					Marker marker = map
+							.addMarker(new MarkerOptions()
+									.position(
+											new LatLng(toilet.getLatitude(),
+													toilet.getLongitude()))
+									.title(toilet.getName())
+									.icon(BitmapDescriptorFactory
+											.fromResource(R.drawable.icons_toilet_marker)));
+					if (!status.equals("")) {
+						marker.setSnippet(status);
+
+					}
 				}
 			}
 			progressBar.dismiss();
@@ -626,6 +690,63 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 		intent.putExtra(GlobalConstants.REPORT_TYPE, reportingType);
 		startActivity(intent);
 
+	}
+
+	class MarkerWindowAdapter implements InfoWindowAdapter {
+		Context mContext;
+
+		@SuppressLint("ResourceAsColor")
+		@Override
+		public View getInfoContents(Marker marker) {
+
+			LinearLayout	layout = new LinearLayout(mContext);
+				layout.setLayoutParams(new LayoutParams(
+						LayoutParams.FILL_PARENT, LayoutParams.FILL_PARENT));
+				
+				LinearLayout	layout2 = new LinearLayout(mContext);
+				layout.setLayoutParams(new LayoutParams(
+						LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
+				layout2.setOrientation(LinearLayout.HORIZONTAL);
+				TextView textView = new TextView(mContext);
+				textView.setText(marker.getTitle());
+				textView.setTextColor(Color.BLACK);
+				textView.setTypeface(null, Typeface.BOLD);
+				layout.addView(textView);
+				TextView isOpen = new TextView(mContext);
+				ImageView imageView=new ImageView(mContext);
+				imageView.setImageResource(R.drawable.direction);
+				String snippet =marker.getSnippet();
+				if(snippet!=null &&!snippet.equals("")){
+						isOpen.setText(snippet);
+						layout2.addView(isOpen);
+						layout2.addView(imageView);
+						layout.setOrientation(LinearLayout.VERTICAL);
+
+						layout.addView(layout2);
+				}else{
+					layout.addView(imageView);
+
+				}
+				
+				return layout;
+		}
+
+		@Override
+		public View getInfoWindow(Marker marker) {
+
+			return null;
+		}
+
+		public MarkerWindowAdapter(Context context) {
+			this.mContext = context;
+			// TODO Auto-generated constructor stub
+		}
+	}
+
+	public String roundPosition(double latitude2) {
+		// TODO Auto-generated method stub
+		return String
+				.valueOf((double) Math.round(latitude2 * 10000000) / 10000000);
 	}
 
 }
