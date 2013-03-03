@@ -56,7 +56,7 @@ public class CustomizedAdapter extends ArrayAdapter<Component> {
 		else if (component.isTrash())
 			holder.imgIcon1.setImageResource(R.drawable.icon_dustbin_list_view);
 		
-		holder.imgIcon2.setImageResource(R.drawable.icon_go_right);
+		holder.imgIcon2.setImageResource(R.drawable.direction);
 		holder.imgIcon2.setContentDescription(component.getLatitude()+"$"+component.getLongitude());
        return row;
 	}

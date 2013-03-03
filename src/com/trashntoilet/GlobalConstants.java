@@ -24,6 +24,7 @@ public class GlobalConstants {
 	public static final String ADD_NEW = "addNew";
 	public static final String SUGGEST_NEW = "suggestNew";
 	public static final String NOT_EMPTY = "notEmpty";
+	public static final int NO_OF_ATTEMPTS = 5;
 	public static ArrayList<String> sanitationTips = new ArrayList<String>();
 	public static boolean ADD_OR_SUGGESTED =false;
 	static {

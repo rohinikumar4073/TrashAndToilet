@@ -174,7 +174,7 @@ public class SuggestNew extends Activity {
 		}
        
 		progressBar = new ProgressDialog(this);
-		progressBar.setMessage("Saving Report");
+		progressBar.setMessage("Saving Suggestion");
 		progressBar.setCancelable(false);
 		progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 		progressBar.setProgress(0);
@@ -339,6 +339,7 @@ public class SuggestNew extends Activity {
 				alertDialog.setTitle("Status");
 				alertDialog.setMessage("Succesfully added !");
 				alertDialog.show();
+				GlobalConstants.ADD_OR_SUGGESTED=true;
 
 			}else{
 				AlertDialog alertDialog = new AlertDialog.Builder(context).create();
