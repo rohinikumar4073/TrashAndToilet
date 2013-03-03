@@ -33,7 +33,10 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -117,20 +120,23 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 			reportingType = extras.getString(GlobalConstants.REPORT_TYPE);
 		}
 
-		boolean mobileDataEnabled = false; // Assume disabled
-		ConnectivityManager cm = (ConnectivityManager) this
-				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		boolean mobileDataEnabled = false;
+		ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+	
+		boolean isWifi = manager.getNetworkInfo(
+		                        ConnectivityManager.TYPE_WIFI)
+		                        .isConnectedOrConnecting();
 		try {
-			Class cmClass = Class.forName(cm.getClass().getName());
+			Class cmClass = Class.forName(manager.getClass().getName());
 			Method method = cmClass.getDeclaredMethod("getMobileDataEnabled");
 			method.setAccessible(true); // Make the method callable
 			// get the setting for "mobile data"
-			mobileDataEnabled = (Boolean) method.invoke(cm);
+			mobileDataEnabled = (Boolean) method.invoke(manager);
 		} catch (Exception e) {
 			// Some problem accessible private API
 			// TODO do whatever error handling you want here
 		}
-		if (!mobileDataEnabled) {
+		if (!mobileDataEnabled && !isWifi) {
 			ViewGroup group = (ViewGroup) findViewById(R.layout.activity_search_toilet);
 			if (group != null)
 				group.invalidate();
