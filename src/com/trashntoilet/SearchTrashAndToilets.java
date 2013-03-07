@@ -33,10 +33,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.net.wifi.WifiInfo;
-import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -87,7 +84,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 	public static float accuracy;
 	private Handler progressBarHandler = new Handler();
 	private int progressBarStatus;
-	private ProgressDialog progressBar;
+	public ProgressDialog progressBar;
 	public static String reportingType;
 	public static String fromView;
 	public Context mContext;
@@ -122,10 +119,9 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 
 		boolean mobileDataEnabled = false;
 		ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-	
-		boolean isWifi = manager.getNetworkInfo(
-		                        ConnectivityManager.TYPE_WIFI)
-		                        .isConnectedOrConnecting();
+
+		boolean isWifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+				.isConnectedOrConnecting();
 		try {
 			Class cmClass = Class.forName(manager.getClass().getName());
 			Method method = cmClass.getDeclaredMethod("getMobileDataEnabled");
@@ -226,22 +222,33 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 						}
 
 					} else {
-						progressBar = new ProgressDialog(this);
-						progressBar.setMessage("Loading Toilets & TrashCans");
-						progressBar.setCancelable(false);
-						progressBar
-								.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-						progressBar.setProgress(0);
-						progressBar.setMax(100);
-						progressBar.show();
-						progressBarHandler.post(new Runnable() {
-							public void run() {
-								progressBar.setProgress(progressBarStatus);
-							}
-						});
+						if (!GlobalConstants.TRUE.equals(GPSTracker.error)) {
+							progressBar = new ProgressDialog(this);
+							progressBar
+									.setMessage("Loading Toilets & TrashCans");
+							progressBar.setCancelable(false);
+							/*
+							 * progressBar.setButton(DialogInterface.BUTTON_NEGATIVE
+							 * , "Cancel", new DialogInterface.OnClickListener()
+							 * {
+							 * 
+							 * @Override public void onClick(DialogInterface
+							 * dialog, int which) { dialog.dismiss(); } });
+							 */
+							progressBar
+									.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+							progressBar.setProgress(0);
+							progressBar.setMax(100);
+							progressBar.show();
+							progressBarHandler.post(new Runnable() {
+								public void run() {
+									progressBar.setProgress(progressBarStatus);
+								}
+							});
 
-						addToiletsAndDustbins(String.valueOf(latitude),
-								String.valueOf(longitude), map);
+							addToiletsAndDustbins(String.valueOf(latitude),
+									String.valueOf(longitude), map);
+						}
 					}
 				} else {
 					findViewById(R.id.imageView2).setLayoutParams(
@@ -270,7 +277,7 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 				// can't get location
 				// GPS or Network is not enabled
 				// Ask user to enable GPS/network in settings
-				gps.showSettingsAlert();
+				gps.showGPSSettingsAlert();
 			}
 		}
 	}
@@ -386,10 +393,11 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 
 		@Override
 		protected void onPostExecute(String result) {
-			
+
 			if (mode.equals(GlobalConstants.ONLY_TOILETS)) {
-				if(toilets.size()==0){
-					AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+				if (toilets.size() == 0) {
+					AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+							mContext);
 
 					// Setting Dialog Title
 					alertDialog.setTitle("No toilets");
@@ -425,8 +433,9 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 				}
 				// progressBar.dismiss();
 			} else if (mode.equals(GlobalConstants.ONLY_TRASH)) {
-				if(trashcans.size()==0){
-					AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+				if (trashcans.size() == 0) {
+					AlertDialog.Builder alertDialog = new AlertDialog.Builder(
+							mContext);
 
 					// Setting Dialog Title
 					alertDialog.setTitle("No Trashcan");
@@ -817,13 +826,14 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 
 	public void showDataSettingsAlert() {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
+	 {
+			// Setting Dialog Title
+			alertDialog.setTitle("Data Connection");
 
-		// Setting Dialog Title
-		alertDialog.setTitle("Data Connection");
-
-		// Setting Dialog Message
-		alertDialog
-				.setMessage("Data Connection is not enabled. Do you want to go to settings menu ?");
+			// Setting Dialog Message
+			alertDialog
+					.setMessage("WiFi and data Connection is not enabled. Do you want to go to settings menu ?");
+		}
 
 		// On pressing Settings button
 		alertDialog.setPositiveButton("Settings",
