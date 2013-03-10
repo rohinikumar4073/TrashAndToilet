@@ -53,6 +53,22 @@ public class GPSTracker extends Service implements LocationListener {
 		return this.location;
 	}
 
+	public boolean isGPSEnabled() {
+		return isGPSEnabled;
+	}
+
+	public void setGPSEnabled(boolean isGPSEnabled) {
+		this.isGPSEnabled = isGPSEnabled;
+	}
+
+	public boolean isNetworkEnabled() {
+		return isNetworkEnabled;
+	}
+
+	public void setNetworkEnabled(boolean isNetworkEnabled) {
+		this.isNetworkEnabled = isNetworkEnabled;
+	}
+
 	public Location getLocation() {
 		try {
 			locationManager = (LocationManager) mContext
@@ -170,7 +186,7 @@ public class GPSTracker extends Service implements LocationListener {
 
 		// Setting Dialog Message
 		alertDialog
-				.setMessage("GPS Connection is not enabled. Do you want to go to settings menu ?");
+				.setMessage("GPS Connection is not enabled. Please enable the settings ?");
 
 		// On pressing Settings button
 		alertDialog.setPositiveButton("Settings",

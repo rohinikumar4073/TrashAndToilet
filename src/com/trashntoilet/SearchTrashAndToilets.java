@@ -33,6 +33,7 @@ import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -88,7 +89,9 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 	public static String reportingType;
 	public static String fromView;
 	public Context mContext;
-	public static int attempts;
+	public GPSTracker gps;
+	public int attempts;
+	boolean showedAlert = false;
 
 	public GoogleMap getMap() {
 		return map;
@@ -110,17 +113,103 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 	protected void onCreate(Bundle savedInstanceState) {
 		mContext = this;
 		super.onCreate(savedInstanceState);
+		// Getting any variables passed
 		setContentView(R.layout.activity_search_toilet);
 		Bundle extras = getIntent().getExtras();
 		if (extras != null) {
 			fromView = extras.getString(GlobalConstants.FROM_VIEW);
 			reportingType = extras.getString(GlobalConstants.REPORT_TYPE);
+
+		}
+		gps = new GPSTracker(SearchTrashAndToilets.this);
+		SupportMapFragment id = ((SupportMapFragment) getSupportFragmentManager()
+				.findFragmentById(R.id.map));
+		if (id != null) {
+			map = id.getMap();
+		}
+		// If the from page is from add or suggest 
+		if (GlobalConstants.ADD_NEW.equals(fromView)
+			 || GlobalConstants.SUGGEST_NEW.equals(fromView)) {
+			gotLocation = true;
+			latitude = gps.getLatitude();
+			longitude = gps.getLongitude();
+			cLocation = new LatLng(latitude, longitude);
+			CameraPosition cLocation = new CameraPosition.Builder()
+					.target(new LatLng(latitude, longitude)).zoom(12.5f)
+					.bearing(300).tilt(50).build();
+			
+			map.moveCamera(CameraUpdateFactory.newCameraPosition(cLocation));
+			Location locationNew = gps.getLocationDefault();
+			if (locationNew != null)
+				accuracy = locationNew.getAccuracy();
+			// Vaish
+			findViewById(R.id.imageView2).setLayoutParams(
+					new LayoutParams(0, 0));
+			findViewById(R.id.imageView3).setLayoutParams(
+					new LayoutParams(0, 0));
+			findViewById(R.id.imageView4).setLayoutParams(
+					new LayoutParams(0, 0));
+			findViewById(R.id.imageView5).setLayoutParams(
+					new LayoutParams(0, 0));
+			findViewById(R.id.imageView6).setLayoutParams(
+					new LayoutParams(0, 0));
+			findViewById(R.id.mapText).setLayoutParams(
+					new LayoutParams(LayoutParams.FILL_PARENT,
+							LayoutParams.FILL_PARENT));
+
+			map.setOnMapLongClickListener(this);
+
+		}else{
+		dotheHandler();
 		}
 
-		boolean mobileDataEnabled = false;
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		gotLocation = true;
+		super.onPause();
+	}
+
+	public void dotheHandler() {
+
+		doTheProcess();
+		if(!gotLocation)
+		new Handler().postDelayed(runnable, 3000);
+	}
+
+	public Runnable runnable = new Runnable() {
+		public void run() {
+			doTheProcess();
+			dotheHandler();
+		}
+	};
+	public boolean gotLocation = false;
+	private boolean mobileDataEnabled;
+	private boolean isWifi;
+	private boolean shownDataSettings;
+	public boolean isConnectingToInternet(){
+        ConnectivityManager connectivity = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+          if (connectivity != null)
+          {
+              NetworkInfo[] info = connectivity.getAllNetworkInfo();
+              if (info != null)
+                  for (int i = 0; i < info.length; i++)
+                      if (info[i].getState() == NetworkInfo.State.CONNECTED)
+                      {
+                          return true;
+                      }
+ 
+          }
+          return false;
+    }
+	private void doTheProcess() {
+		attempts++;
+		mobileDataEnabled = false;
 		ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
 
-		boolean isWifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
+		isWifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
 				.isConnectedOrConnecting();
 		try {
 			Class cmClass = Class.forName(manager.getClass().getName());
@@ -136,150 +225,154 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 			ViewGroup group = (ViewGroup) findViewById(R.layout.activity_search_toilet);
 			if (group != null)
 				group.invalidate();
-			showDataSettingsAlert();
-		} else {
-
-			GPSTracker gps = new GPSTracker(SearchTrashAndToilets.this);
-			// check if GPS enabled
-			if (gps.canGetLocation()) {
-
-				latitude = gps.getLatitude();
-				longitude = gps.getLongitude();
-				cLocation = new LatLng(latitude, longitude);
-				CameraPosition cLocation = new CameraPosition.Builder()
-						.target(new LatLng(latitude, longitude)).zoom(12.5f)
-						.bearing(300).tilt(50).build();
-
-				map = ((SupportMapFragment) getSupportFragmentManager()
-						.findFragmentById(R.id.map)).getMap();
-				map.moveCamera(CameraUpdateFactory.newCameraPosition(cLocation));
-				Location locationNew = gps.getLocationDefault();
-				if (locationNew != null)
-					accuracy = locationNew.getAccuracy();
-				// Vaish
-				if (!GlobalConstants.ADD_NEW.equals(fromView)
-						&& !GlobalConstants.SUGGEST_NEW.equals(fromView)) {
-					map.setInfoWindowAdapter(new MarkerWindowAdapter(this));
-					map.setOnInfoWindowClickListener(this);
-					map.addMarker(new MarkerOptions()
-							.position(new LatLng(latitude, longitude))
-							.title("You")
-							.icon(BitmapDescriptorFactory
-									.fromResource(R.drawable.icon_locator)));
-					if ((toilets.size() > 0 || trashcans.size() > 0)
-							&& !GlobalConstants.ADD_OR_SUGGESTED) {
-
-						for (Iterator iterator = toilets.iterator(); iterator
-								.hasNext();) {
-							Component toilet = (Component) iterator.next();
-							String status = "";
-							if (GlobalConstants.NOT_EMPTY.equals(toilet
-									.getOpeningHours())) {
-								if (toilet.getOpenNow())
-									status = "Opened";
-								else
-									status = "Closed";
-							}
-							Marker marker = map
-									.addMarker(new MarkerOptions()
-											.position(
-													new LatLng(
-															toilet.getLatitude(),
-															toilet.getLongitude()))
-											.title(toilet.getName())
-											.icon(BitmapDescriptorFactory
-													.fromResource(R.drawable.icons_toilet_marker)));
-							if (!status.equals("")) {
-								marker.setSnippet(status);
-
-							}
-						}
-						for (Iterator iterator = trashcans.iterator(); iterator
-								.hasNext();) {
-
-							Component toilet = (Component) iterator.next();
-							String status = "";
-							if (GlobalConstants.NOT_EMPTY.equals(toilet
-									.getOpeningHours())) {
-								if (toilet.getOpenNow())
-									status = "Opened";
-								else
-									status = "Closed";
-							}
-							Marker marker = map
-									.addMarker(new MarkerOptions()
-											.position(
-													new LatLng(
-															toilet.getLatitude(),
-															toilet.getLongitude()))
-											.title(toilet.getName())
-											.icon(BitmapDescriptorFactory
-													.fromResource(R.drawable.icon_dustbin_marker)));
-							if (!status.equals("")) {
-								marker.setSnippet(status);
-
-							}
-						}
-
-					} else {
-						if (!GlobalConstants.TRUE.equals(GPSTracker.error)) {
-							progressBar = new ProgressDialog(this);
-							progressBar
-									.setMessage("Loading Toilets & TrashCans");
-							progressBar.setCancelable(false);
-							/*
-							 * progressBar.setButton(DialogInterface.BUTTON_NEGATIVE
-							 * , "Cancel", new DialogInterface.OnClickListener()
-							 * {
-							 * 
-							 * @Override public void onClick(DialogInterface
-							 * dialog, int which) { dialog.dismiss(); } });
-							 */
-							progressBar
-									.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-							progressBar.setProgress(0);
-							progressBar.setMax(100);
-							progressBar.show();
-							progressBarHandler.post(new Runnable() {
-								public void run() {
-									progressBar.setProgress(progressBarStatus);
-								}
-							});
-
-							addToiletsAndDustbins(String.valueOf(latitude),
-									String.valueOf(longitude), map);
-						}
-					}
-				} else {
-					findViewById(R.id.imageView2).setLayoutParams(
-							new LayoutParams(0, 0));
-					findViewById(R.id.imageView3).setLayoutParams(
-							new LayoutParams(0, 0));
-					findViewById(R.id.imageView4).setLayoutParams(
-							new LayoutParams(0, 0));
-					findViewById(R.id.imageView5).setLayoutParams(
-							new LayoutParams(0, 0));
-					findViewById(R.id.imageView6).setLayoutParams(
-							new LayoutParams(0, 0));
-					findViewById(R.id.mapText).setLayoutParams(
-							new LayoutParams(LayoutParams.FILL_PARENT,
-									LayoutParams.FILL_PARENT));
-
-					map.setOnMapLongClickListener(this);
-				}
-				/*
-				 * map.setOnMapClickListener(this);
-				 * map.setOnMapLongClickListener(this);
-				 * map.setOnCameraChangeListener(this);
-				 */
-				// \n is for new line
-			} else {
-				// can't get location
-				// GPS or Network is not enabled
-				// Ask user to enable GPS/network in settings
-				gps.showGPSSettingsAlert();
+			if (!shownDataSettings) {
+				showDataSettingsAlert();
+				shownDataSettings = true;
 			}
+		}else if (!gps.isGPSEnabled() || !gps.isNetworkEnabled()) {
+			if (!showedAlert) {
+				gps.showGPSSettingsAlert();
+				showedAlert = true;
+			}
+			gotLocation = true;
+		} else if (attempts > GlobalConstants.NO_OF_ATTEMPTS) {
+       
+			gotLocation = true;
+			progressBar.dismiss();
+			showDataSettingsAlert();
+
+		} else if(!isConnectingToInternet()){
+			if (progressBar == null) {
+				showProgressBar();
+			}
+			
+		} else if(gps.getLocation() != null) {
+            mainProcess();
+		} else {
+			if (progressBar == null) {
+				showProgressBar();
+			}
+
 		}
+	}
+
+	/*
+	 * map.setOnMapClickListener(this); map.setOnMapLongClickListener(this);
+	 * map.setOnCameraChangeListener(this);
+	 */
+	// \n is for new line
+
+	private void mainProcess() {
+		gotLocation = true;
+		latitude = gps.getLatitude();
+		longitude = gps.getLongitude();
+		cLocation = new LatLng(latitude, longitude);
+		CameraPosition cLocation = new CameraPosition.Builder()
+				.target(new LatLng(latitude, longitude)).zoom(12.5f)
+				.bearing(300).tilt(50).build();
+		
+		map.moveCamera(CameraUpdateFactory.newCameraPosition(cLocation));
+		Location locationNew = gps.getLocationDefault();
+		if (locationNew != null)
+			accuracy = locationNew.getAccuracy();
+		// Vaish
+		
+			map.setInfoWindowAdapter(new MarkerWindowAdapter(this));
+			map.setOnInfoWindowClickListener(this);
+			map.addMarker(new MarkerOptions()
+					.position(new LatLng(latitude, longitude))
+					.title("You")
+					.icon(BitmapDescriptorFactory
+							.fromResource(R.drawable.icon_locator)));
+			if ((toilets.size() > 0 || trashcans.size() > 0)
+					&& !GlobalConstants.ADD_OR_SUGGESTED) {
+				if (progressBar!=null) {
+	                 progressBar.dismiss();
+				}
+				for (Iterator iterator = toilets.iterator(); iterator
+						.hasNext();) {
+					Component toilet = (Component) iterator.next();
+					String status = "";
+					if (GlobalConstants.NOT_EMPTY.equals(toilet
+							.getOpeningHours())) {
+						if (toilet.getOpenNow())
+							status = "Opened";
+						else
+							status = "Closed";
+					}
+					Marker marker = map
+							.addMarker(new MarkerOptions()
+									.position(
+											new LatLng(
+													toilet.getLatitude(),
+													toilet.getLongitude()))
+									.title(toilet.getName())
+									.icon(BitmapDescriptorFactory
+											.fromResource(R.drawable.icons_toilet_marker)));
+					if (!status.equals("")) {
+						marker.setSnippet(status);
+
+					}
+				}
+				for (Iterator iterator = trashcans.iterator(); iterator
+						.hasNext();) {
+
+					Component toilet = (Component) iterator.next();
+					String status = "";
+					if (GlobalConstants.NOT_EMPTY.equals(toilet
+							.getOpeningHours())) {
+						if (toilet.getOpenNow())
+							status = "Opened";
+						else
+							status = "Closed";
+					}
+					Marker marker = map
+							.addMarker(new MarkerOptions()
+									.position(
+											new LatLng(
+													toilet.getLatitude(),
+													toilet.getLongitude()))
+									.title(toilet.getName())
+									.icon(BitmapDescriptorFactory
+											.fromResource(R.drawable.icon_dustbin_marker)));
+					if (!status.equals("")) {
+						marker.setSnippet(status);
+
+					}
+				}
+
+			} else {
+				if (!GlobalConstants.TRUE.equals(GPSTracker.error)) {
+					if (progressBar == null) {
+						showProgressBar();
+					}
+
+					addToiletsAndDustbins(String.valueOf(latitude),
+							String.valueOf(longitude), map);
+				}
+			}
+		}	
+	
+
+	private void showProgressBar() {
+
+		progressBar = new ProgressDialog(this);
+		progressBar.setMessage("Loading Toilets & TrashCans");
+		progressBar.setCancelable(false);
+		/*
+		 * progressBar.setButton(DialogInterface.BUTTON_NEGATIVE , "Cancel", new
+		 * DialogInterface.OnClickListener() {
+		 * 
+		 * @Override public void onClick(DialogInterface dialog, int which) {
+		 * dialog.dismiss(); } });
+		 */
+		progressBar.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+		progressBar.show();
+		progressBarHandler.post(new Runnable() {
+			public void run() {
+				progressBar.setProgress(progressBarStatus);
+			}
+		});
 	}
 
 	private void addToiletsAndDustbins(String lat, String lag, GoogleMap map) {
@@ -470,8 +563,8 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 
 					}
 				}
+				progressBar.dismiss();
 			}
-			progressBar.dismiss();
 		}
 
 		@SuppressWarnings("unused")
@@ -814,7 +907,8 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 	@Override
 	protected void onResume() {
 		// TODO Auto-generated method stub
-
+		attempts = 0;
+		gotLocation = false;
 		super.onResume();
 	}
 
@@ -826,13 +920,13 @@ public class SearchTrashAndToilets extends FragmentActivity implements
 
 	public void showDataSettingsAlert() {
 		AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
-	 {
+		{
 			// Setting Dialog Title
 			alertDialog.setTitle("Data Connection");
 
 			// Setting Dialog Message
 			alertDialog
-					.setMessage("WiFi and data Connection is not enabled. Do you want to go to settings menu ?");
+					.setMessage("WiFi and data Connection is not enabled. Please enable the settings");
 		}
 
 		// On pressing Settings button
